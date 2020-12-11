@@ -1,0 +1,33 @@
+{
+    "name": "I_PRRELEASEDATE",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "PR No",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PR Ln",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PR Release Date",
+                "type": "date"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "I_PRRELEASEDATE"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

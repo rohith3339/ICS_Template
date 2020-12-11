@@ -1,0 +1,71 @@
+{
+    "name": "F_PURCHASEINBOUND_DF",
+    "properties": {
+        "folder": {
+            "name": "SAPECCProcurementFD"
+        },
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "LIPS_PROC",
+                        "type": "DatasetReference"
+                    },
+                    "name": "LIPS"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "LIKP_PROC",
+                        "type": "DatasetReference"
+                    },
+                    "name": "LIKP"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "EIKP",
+                        "type": "DatasetReference"
+                    },
+                    "name": "EIKP"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "I_PORELEASEDATE",
+                        "type": "DatasetReference"
+                    },
+                    "name": "PORELEASEDATE"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "F_Inbound",
+                        "type": "DatasetReference"
+                    },
+                    "name": "FPURCHASEINBOUNDSINK"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "LIKPJN"
+                },
+                {
+                    "name": "EIKPJN"
+                },
+                {
+                    "name": "PORELEASEDDATEJN"
+                },
+                {
+                    "name": "RenameColumns"
+                },
+                {
+                    "name": "Transformations"
+                },
+                {
+                    "name": "InboundSKey"
+                }
+            ],
+            "script": "source(output(\n\t\tARKTX as string,\n\t\tLFIMG as decimal(13,3),\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tNETWR as decimal(15,2),\n\t\tPOSNR as integer,\n\t\tVBELN as string,\n\t\tVGBEL as string,\n\t\tVGPOS as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> LIPS\nsource(output(\n\t\tBLDAT as date,\n\t\tBOLNR as string,\n\t\tEXNUM as string,\n\t\tLFDAT as date,\n\t\tSPE_LOEKZ as string,\n\t\tTDDAT as date,\n\t\tVBELN as string,\n\t\tWERKS as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> LIKP\nsource(output(\n\t\tEXNUM as string,\n\t\tEXPVZ as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EIKP\nsource(output(\n\t\t{PO No} as string,\n\t\t{PO Release Date} as date,\n\t\tSKEY as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> PORELEASEDATE\nLIPS, LIKP join(ltrim(LIPS@VBELN,'0') == ltrim(LIKP@VBELN,'0'),\n\tjoinType:'left',\n\tbroadcast: 'auto')~> LIKPJN\nLIKPJN, EIKP join(ltrim(LIKP@EXNUM,'0') == ltrim(EIKP@EXNUM,'0'),\n\tjoinType:'left',\n\tbroadcast: 'auto')~> EIKPJN\nEIKPJN, PORELEASEDATE join(VGBEL == {PO No},\n\tjoinType:'left',\n\tbroadcast: 'auto')~> PORELEASEDDATEJN\nTransformations select(mapColumn(\n\t\t{Inbound No} = VBELN,\n\t\t{Inbound Ln} = POSNR,\n\t\t{Inbound Qty} = LFIMG,\n\t\t{Inbound Value} = NETWR,\n\t\t{Inbound Desc} = ARKTX,\n\t\t{Inbound Document Date} = BLDAT,\n\t\t{Inbound Trnsplning Date} = TDDAT,\n\t\t{Inbound Delivery Date} = LFDAT,\n\t\t{Inbound Transport Mode} = EXPVZ,\n\t\t{Inbound Bill of Lading} = BOLNR,\n\t\t{Inbound Deletion Ind} = SPE_LOEKZ,\n\t\t{PO Release Date},\n\t\t{Vendor Lead Time},\n\t\t{Inbound CKey}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nPORELEASEDDATEJN derive(VBELN = ltrim(LIPS@VBELN,'0'),\n\t\tPOSNR = toString(POSNR,'####'),\n\t\tSPE_LOEKZ = case(SPE_LOEKZ=='X','Deleted','Active'),\n\t\tEXPVZ = case(EXPVZ=='1','Air',EXPVZ=='2','Road',EXPVZ=='3','Sea','Others'),\n\t\t{Inbound CKey} = concat(ltrim(LIPS@VBELN,'0'),toString(POSNR, \"####\")),\n\t\t{Vendor Lead Time} = {TDDAT}-{PO Release Date}) ~> Transformations\nRenameColumns keyGenerate(output({Inbound SKey} as long),\n\tstartAt: 1L) ~> InboundSKey\nInboundSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[F_Inbound]([Inbound CKey],[Inbound SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> FPURCHASEINBOUNDSINK"
+        }
+    }
+}

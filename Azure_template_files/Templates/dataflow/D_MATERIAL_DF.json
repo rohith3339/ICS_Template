@@ -1,0 +1,51 @@
+{
+    "name": "D_MATERIAL_DF",
+    "properties": {
+        "folder": {
+            "name": "SAPECCProcurementFD"
+        },
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "MARA",
+                        "type": "DatasetReference"
+                    },
+                    "name": "MARA"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "MAKT",
+                        "type": "DatasetReference"
+                    },
+                    "name": "MAKT"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "D_Material",
+                        "type": "DatasetReference"
+                    },
+                    "name": "MaterialSink"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "MARAMAKTJN"
+                },
+                {
+                    "name": "ColumnsSelect"
+                },
+                {
+                    "name": "TrimLeadingZeros"
+                },
+                {
+                    "name": "MaterialSKey"
+                }
+            ],
+            "script": "source(output(\n\t\tBISMT as string,\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tMEINS as string,\n\t\tMTART as string,\n\t\tRAUBE as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> MARA\nsource(output(\n\t\tMAKTX as string,\n\t\tMATNR as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> MAKT\nMARA, MAKT join(MARA@MATNR == MAKT@MATNR,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> MARAMAKTJN\nMARAMAKTJN select(mapColumn(\n\t\t{Material No} = MARA@MATNR,\n\t\t{Material Desc} = MAKTX,\n\t\t{Material CKey} = MARA@MATNR\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> ColumnsSelect\nColumnsSelect derive({Material No} = ltrim({Material No}, '0'),\n\t\t{Material CKey} = ltrim({Material CKey}, '0')) ~> TrimLeadingZeros\nTrimLeadingZeros keyGenerate(output({Material SKey} as long),\n\tstartAt: 1L) ~> MaterialSKey\nMaterialSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[D_Material]([Material CKey],[Material SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> MaterialSink"
+        }
+    }
+}

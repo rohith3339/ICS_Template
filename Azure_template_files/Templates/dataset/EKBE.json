@@ -1,0 +1,102 @@
+{
+    "name": "EKBE",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "BELNR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "BEWTP",
+                "type": "nvarchar"
+            },
+            {
+                "name": "BLDAT",
+                "type": "date"
+            },
+            {
+                "name": "BUDAT",
+                "type": "date"
+            },
+            {
+                "name": "BUZEI",
+                "type": "smallint",
+                "precision": 5
+            },
+            {
+                "name": "BWART",
+                "type": "nvarchar"
+            },
+            {
+                "name": "DMBTR",
+                "type": "decimal",
+                "precision": 15,
+                "scale": 3
+            },
+            {
+                "name": "EBELN",
+                "type": "nvarchar"
+            },
+            {
+                "name": "EBELP",
+                "type": "smallint",
+                "precision": 5
+            },
+            {
+                "name": "ERNAM",
+                "type": "nvarchar"
+            },
+            {
+                "name": "GJAHR",
+                "type": "smallint",
+                "precision": 5
+            },
+            {
+                "name": "MENGE",
+                "type": "decimal",
+                "precision": 15,
+                "scale": 3
+            },
+            {
+                "name": "SHKZG",
+                "type": "nvarchar"
+            },
+            {
+                "name": "WAERS",
+                "type": "nvarchar"
+            },
+            {
+                "name": "WRBTR",
+                "type": "decimal",
+                "precision": 15,
+                "scale": 3
+            },
+            {
+                "name": "LFBNR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LFGJA",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LFPOS",
+                "type": "nvarchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "EKBE"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

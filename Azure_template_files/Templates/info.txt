@@ -1,0 +1,6 @@
+selected resource name:		SAPECCPROCUREMENT_PP
+selected resource type:		pipeline
+factory name:			orgbietl
+factory location:		eastus2
+subscription id:		6fe100c3-7b99-4487-a87c-b3ed63ae5fa9
+time of download (UTC):		Tue, 08 Dec 2020 05:16:45 GMT

@@ -1,0 +1,54 @@
+{
+    "name": "CDPOS_PROC",
+    "properties": {
+        "description": "This is the version of the CDPOS table with the only Procurment Data",
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "CHANGENR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "CHNGIND",
+                "type": "nvarchar"
+            },
+            {
+                "name": "OBJECTCLAS",
+                "type": "nvarchar"
+            },
+            {
+                "name": "OBJECTID",
+                "type": "nvarchar"
+            },
+            {
+                "name": "TABKEY",
+                "type": "nvarchar"
+            },
+            {
+                "name": "TABNAME",
+                "type": "nvarchar"
+            },
+            {
+                "name": "VALUE_NEW",
+                "type": "nvarchar"
+            },
+            {
+                "name": "FNAME",
+                "type": "nvarchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "CDPOS_PROC"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

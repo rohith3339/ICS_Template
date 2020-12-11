@@ -1,0 +1,173 @@
+{
+    "name": "EBAN",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "AFNAM",
+                "type": "nvarchar"
+            },
+            {
+                "name": "BADAT",
+                "type": "date"
+            },
+            {
+                "name": "BANFN",
+                "type": "nvarchar"
+            },
+            {
+                "name": "BEDNR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "BLCKD",
+                "type": "nvarchar"
+            },
+            {
+                "name": "BNFPO",
+                "type": "smallint",
+                "precision": 5
+            },
+            {
+                "name": "BSART",
+                "type": "nvarchar"
+            },
+            {
+                "name": "BSMNG",
+                "type": "decimal",
+                "precision": 13,
+                "scale": 3
+            },
+            {
+                "name": "EBELN",
+                "type": "nvarchar"
+            },
+            {
+                "name": "EBELP",
+                "type": "smallint",
+                "precision": 5
+            },
+            {
+                "name": "EKGRP",
+                "type": "nvarchar"
+            },
+            {
+                "name": "EKORG",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ERDAT",
+                "type": "date"
+            },
+            {
+                "name": "ERNAM",
+                "type": "nvarchar"
+            },
+            {
+                "name": "FRGKZ",
+                "type": "nvarchar"
+            },
+            {
+                "name": "FRGST",
+                "type": "nvarchar"
+            },
+            {
+                "name": "FRGZU",
+                "type": "nvarchar"
+            },
+            {
+                "name": "KNTTP",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LFDAT",
+                "type": "date"
+            },
+            {
+                "name": "LGORT",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LOAD_DATETIME",
+                "type": "date"
+            },
+            {
+                "name": "LOEKZ",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MATKL",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MATNR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MEINS",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MENGE",
+                "type": "decimal",
+                "precision": 13,
+                "scale": 3
+            },
+            {
+                "name": "PEINH",
+                "type": "smallint",
+                "precision": 5
+            },
+            {
+                "name": "PREIS",
+                "type": "decimal",
+                "precision": 11,
+                "scale": 2
+            },
+            {
+                "name": "PRIO_URG",
+                "type": "smallint",
+                "precision": 5
+            },
+            {
+                "name": "PSTYP",
+                "type": "nvarchar"
+            },
+            {
+                "name": "RLWRT",
+                "type": "decimal",
+                "precision": 15,
+                "scale": 2
+            },
+            {
+                "name": "STATU",
+                "type": "nvarchar"
+            },
+            {
+                "name": "TXZ01",
+                "type": "nvarchar"
+            },
+            {
+                "name": "WAERS",
+                "type": "nvarchar"
+            },
+            {
+                "name": "WERKS",
+                "type": "nvarchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "EBAN"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

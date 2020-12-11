@@ -1,0 +1,35 @@
+{
+    "name": "T023T",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "MATKL",
+                "type": "nvarchar"
+            },
+            {
+                "name": "WGBEZ60",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LOAD_DATETIME",
+                "type": "smalldatetime",
+                "precision": 16,
+                "scale": 0
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "T023T"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

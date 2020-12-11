@@ -1,0 +1,51 @@
+{
+    "name": "MARA",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "BISMT",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MATKL",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MATNR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MEINS",
+                "type": "nvarchar"
+            },
+            {
+                "name": "MTART",
+                "type": "nvarchar"
+            },
+            {
+                "name": "RAUBE",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LOAD_DATETIME",
+                "type": "smalldatetime",
+                "precision": 16,
+                "scale": 0
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "MARA"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

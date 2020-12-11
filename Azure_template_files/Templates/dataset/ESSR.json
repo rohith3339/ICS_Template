@@ -1,0 +1,73 @@
+{
+    "name": "ESSR",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "LBLNI",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ERNAM",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ERDAT",
+                "type": "date"
+            },
+            {
+                "name": "AEDAT",
+                "type": "date"
+            },
+            {
+                "name": "LWERT",
+                "type": "decimal",
+                "precision": 11,
+                "scale": 2
+            },
+            {
+                "name": "TXZ01",
+                "type": "nvarchar"
+            },
+            {
+                "name": "NETWR",
+                "type": "decimal",
+                "precision": 11,
+                "scale": 2
+            },
+            {
+                "name": "BUDAT",
+                "type": "date"
+            },
+            {
+                "name": "LOEKZ",
+                "type": "nvarchar"
+            },
+            {
+                "name": "WAERS",
+                "type": "nvarchar"
+            },
+            {
+                "name": "EBELN",
+                "type": "nvarchar"
+            },
+            {
+                "name": "EBELP",
+                "type": "nvarchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "ESSR"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

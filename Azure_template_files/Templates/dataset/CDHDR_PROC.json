@@ -1,0 +1,42 @@
+{
+    "name": "CDHDR_PROC",
+    "properties": {
+        "description": "This is the version of the CDHDR table with only procurement data.",
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "CHANGENR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "OBJECTCLAS",
+                "type": "nvarchar"
+            },
+            {
+                "name": "OBJECTID",
+                "type": "nvarchar"
+            },
+            {
+                "name": "UDATE",
+                "type": "date"
+            },
+            {
+                "name": "USERNAME",
+                "type": "nvarchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "CDHDR_PROC"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,41 @@
+{
+    "name": "F_PURCHASESES_DF",
+    "properties": {
+        "folder": {
+            "name": "SAPECCProcurementFD"
+        },
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "ESSR",
+                        "type": "DatasetReference"
+                    },
+                    "name": "ESSR"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "F_ServiceEntrySheet",
+                        "type": "DatasetReference"
+                    },
+                    "name": "FPURCHASESESSINK"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "SelectESSR"
+                },
+                {
+                    "name": "SESCKey"
+                },
+                {
+                    "name": "SESSKey"
+                }
+            ],
+            "script": "source(output(\n\t\tLBLNI as string,\n\t\tERNAM as string,\n\t\tERDAT as date,\n\t\tAEDAT as date,\n\t\tLWERT as decimal(11,2),\n\t\tTXZ01 as string,\n\t\tNETWR as decimal(11,2),\n\t\tBUDAT as date,\n\t\tLOEKZ as string,\n\t\tWAERS as string,\n\t\tEBELN as string,\n\t\tEBELP as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> ESSR\nESSR select(mapColumn(\n\t\t{SES No} = LBLNI,\n\t\t{SES Value} = LWERT,\n\t\t{SES Net Value} = NETWR,\n\t\t{SES Desc} = TXZ01,\n\t\t{SES Created Date} = ERDAT,\n\t\t{SES Changed Date} = AEDAT,\n\t\t{SES Posting Date} = BUDAT,\n\t\t{SES Created By} = ERNAM,\n\t\t{SES Deletion Ind} = LOEKZ,\n\t\t{SES Currency} = WAERS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectESSR\nSelectESSR select(mapColumn(\n\t\t{SES No},\n\t\t{SES Value},\n\t\t{SES Net Value},\n\t\t{SES Desc},\n\t\t{SES Created Date},\n\t\t{SES Changed Date},\n\t\t{SES Posting Date},\n\t\t{SES Created By},\n\t\t{SES Deletion Ind},\n\t\t{SES Currency},\n\t\t{SES CKey} = {SES No}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> SESCKey\nSESCKey keyGenerate(output({SES SKey} as long),\n\tstartAt: 1L) ~> SESSKey\nSESSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[F_ServiceEntrySheet]([SES CKey],[SES SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> FPURCHASESESSINK"
+        }
+    }
+}

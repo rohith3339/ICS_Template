@@ -1,0 +1,52 @@
+{
+    "name": "I_PORELEASEDATE_DF",
+    "properties": {
+        "description": "To extract Purchase Requisitions Number and Line Number along with Purchase Requisitions date. ",
+        "folder": {
+            "name": "SAPECCProcurementFD"
+        },
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "CDHDR_PROC",
+                        "type": "DatasetReference"
+                    },
+                    "name": "CDHDR"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "CDPOS_PROC",
+                        "type": "DatasetReference"
+                    },
+                    "name": "CDPOS"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "I_PORELEASEDATE",
+                        "type": "DatasetReference"
+                    },
+                    "name": "IPORELEASEDATESINK"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "CDPOSDataFilter"
+                },
+                {
+                    "name": "JoinCDHDRCDPOS"
+                },
+                {
+                    "name": "RequiredColumns"
+                },
+                {
+                    "name": "Aggregate1"
+                }
+            ],
+            "script": "source(output(\n\t\tCHANGENR as string,\n\t\tOBJECTCLAS as string,\n\t\tOBJECTID as string,\n\t\tUDATE as date,\n\t\tUSERNAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> CDHDR\nsource(output(\n\t\tCHANGENR as string,\n\t\tCHNGIND as string,\n\t\tOBJECTCLAS as string,\n\t\tOBJECTID as string,\n\t\tTABKEY as string,\n\t\tTABNAME as string,\n\t\tVALUE_NEW as string,\n\t\tFNAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> CDPOS\nCDPOS filter(FNAME=='FRGKE'&&TABNAME=='EKKO'&&CHNGIND=='U'&&VALUE_NEW=='3') ~> CDPOSDataFilter\nCDHDR, CDPOSDataFilter join(CDHDR@CHANGENR == CDPOS@CHANGENR\n\t&& CDHDR@OBJECTCLAS == CDPOS@OBJECTCLAS\n\t&& CDHDR@OBJECTID == CDPOS@OBJECTID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinCDHDRCDPOS\nJoinCDHDRCDPOS select(mapColumn(\n\t\t{PO No} = CDHDR@OBJECTID,\n\t\t{PO Release Date} = UDATE\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nRequiredColumns aggregate(groupBy({PO No}),\n\t{PO Release Date} = max({PO Release Date})) ~> Aggregate1\nAggregate1 sink(input(\n\t\t{PO No} as string,\n\t\t{PO Release Date} as date,\n\t\tSKEY as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> IPORELEASEDATESINK"
+        }
+    }
+}

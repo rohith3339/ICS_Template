@@ -1,0 +1,178 @@
+{
+    "name": "F_PURCHASEORDER_DF",
+    "properties": {
+        "folder": {
+            "name": "SAPECCProcurementFD"
+        },
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "EKKO",
+                        "type": "DatasetReference"
+                    },
+                    "name": "EKKO"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "EKPO",
+                        "type": "DatasetReference"
+                    },
+                    "name": "EKPO"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "EKET",
+                        "type": "DatasetReference"
+                    },
+                    "name": "EKET"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "EKBE",
+                        "type": "DatasetReference"
+                    },
+                    "name": "EKBE"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "EKBE",
+                        "type": "DatasetReference"
+                    },
+                    "name": "EKBEInvoice"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "LIPS_PROC",
+                        "type": "DatasetReference"
+                    },
+                    "name": "LIPSPROC"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "EBAN",
+                        "type": "DatasetReference"
+                    },
+                    "name": "EBAN"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "I_PRRELEASEDATE",
+                        "type": "DatasetReference"
+                    },
+                    "name": "PRRELEASEDATE"
+                },
+                {
+                    "dataset": {
+                        "referenceName": "I_PORELEASEDATE",
+                        "type": "DatasetReference"
+                    },
+                    "name": "PORELEASEDATE"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "F_PurchaseOrder",
+                        "type": "DatasetReference"
+                    },
+                    "name": "FPURCHASEORDER"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "EKKOEKPOJN"
+                },
+                {
+                    "name": "SelectRenameColumnsEKPO"
+                },
+                {
+                    "name": "SelectRenameColumnsEKKO"
+                },
+                {
+                    "name": "SelectRenameColumnsEKET"
+                },
+                {
+                    "name": "EKETJN"
+                },
+                {
+                    "name": "SelectColumns"
+                },
+                {
+                    "name": "ReplaceValues"
+                },
+                {
+                    "name": "FilterBEWTP"
+                },
+                {
+                    "name": "SelectRenameColumns"
+                },
+                {
+                    "name": "DerivedColumn1"
+                },
+                {
+                    "name": "GroupByGRQuantity"
+                },
+                {
+                    "name": "POGRJN"
+                },
+                {
+                    "name": "SelectRenameColumns2"
+                },
+                {
+                    "name": "FilterBETWP"
+                },
+                {
+                    "name": "DerivedColumn2"
+                },
+                {
+                    "name": "GroupByInvoiceQtyValue"
+                },
+                {
+                    "name": "POInvoiceJN"
+                },
+                {
+                    "name": "SelectRenameColumns3"
+                },
+                {
+                    "name": "DerivedColumn3"
+                },
+                {
+                    "name": "GroupByInboundQty"
+                },
+                {
+                    "name": "POInboundJN"
+                },
+                {
+                    "name": "SelectRenameColumns4"
+                },
+                {
+                    "name": "DerivedColumn4"
+                },
+                {
+                    "name": "JoinPRReleaseDate"
+                },
+                {
+                    "name": "POPRreleaseDateJN"
+                },
+                {
+                    "name": "Measures"
+                },
+                {
+                    "name": "SelectRequiredColumns"
+                },
+                {
+                    "name": "SurrogateKey"
+                },
+                {
+                    "name": "POReleaseDateJN"
+                },
+                {
+                    "name": "Filter1"
+                }
+            ],
+            "script": "source(output(\n\t\tAEDAT as date,\n\t\tANGDT as date,\n\t\tBEDAT as date,\n\t\tBSART as string,\n\t\tBSTYP as string,\n\t\tBUKRS as string,\n\t\tDPAMT as decimal(11,2),\n\t\tDPDAT as date,\n\t\tDPPCT as decimal(5,2),\n\t\tDPTYP as string,\n\t\tEBELN as string,\n\t\tEKGRP as string,\n\t\tEKKO_POHDR_KEY as string,\n\t\tEKORG as string,\n\t\tERNAM as string,\n\t\tFRGRL as string,\n\t\tINCO1 as string,\n\t\tINCO2 as string,\n\t\tKNUMV as string,\n\t\tLIFNR as string,\n\t\tWAERS as string,\n\t\tWKURS as decimal(9,5),\n\t\tZBD1T as integer,\n\t\tZTERM as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKKO\nsource(output(\n\t\tAEDAT as date,\n\t\tANFNR as string,\n\t\tANFPS as integer,\n\t\tBANFN as string,\n\t\tBEDNR as string,\n\t\tBNFPO as integer,\n\t\tBRTWR as decimal(13,2),\n\t\tBUKRS as string,\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tEKPO_POLN_KEY as string,\n\t\tELIKZ as string,\n\t\tKNTTP as string,\n\t\tLEWED as date,\n\t\tLOEKZ as string,\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tMEINS as string,\n\t\tMENGE as decimal(13,3),\n\t\tNETPR as decimal(11,2),\n\t\tNETWR as decimal(13,2),\n\t\tPEINH as integer,\n\t\tPRIO_URG as integer,\n\t\tPSTYP as string,\n\t\tSTATU as string,\n\t\tTXZ01 as string,\n\t\tWERKS as string,\n\t\tLGORT as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKPO\nsource(output(\n\t\tBANFN as string,\n\t\tBNFPO as integer,\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tEINDT as date,\n\t\tEKET_SCHLN_KEY as string,\n\t\tSLFDT as date,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKET\nsource(output(\n\t\tBELNR as string,\n\t\tBEWTP as string,\n\t\tBLDAT as date,\n\t\tBUDAT as date,\n\t\tBUZEI as integer,\n\t\tBWART as string,\n\t\tDMBTR as decimal(15,3),\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tERNAM as string,\n\t\tGJAHR as integer,\n\t\tMENGE as decimal(15,3),\n\t\tSHKZG as string,\n\t\tWAERS as string,\n\t\tWRBTR as decimal(15,3),\n\t\tLFBNR as string,\n\t\tLFGJA as string,\n\t\tLFPOS as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKBE\nsource(output(\n\t\tBELNR as string,\n\t\tBEWTP as string,\n\t\tBLDAT as date,\n\t\tBUDAT as date,\n\t\tBUZEI as integer,\n\t\tBWART as string,\n\t\tDMBTR as decimal(15,3),\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tERNAM as string,\n\t\tGJAHR as integer,\n\t\tMENGE as decimal(15,3),\n\t\tSHKZG as string,\n\t\tWAERS as string,\n\t\tWRBTR as decimal(15,3),\n\t\tLFBNR as string,\n\t\tLFGJA as string,\n\t\tLFPOS as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKBEInvoice\nsource(output(\n\t\tARKTX as string,\n\t\tLFIMG as decimal(13,3),\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tNETWR as decimal(15,2),\n\t\tPOSNR as integer,\n\t\tVBELN as string,\n\t\tVGBEL as string,\n\t\tVGPOS as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> LIPSPROC\nsource(output(\n\t\tAFNAM as string,\n\t\tBADAT as date,\n\t\tBANFN as string,\n\t\tBEDNR as string,\n\t\tBLCKD as string,\n\t\tBNFPO as integer,\n\t\tBSART as string,\n\t\tBSMNG as decimal(13,3),\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tEKGRP as string,\n\t\tEKORG as string,\n\t\tERDAT as date,\n\t\tERNAM as string,\n\t\tFRGKZ as string,\n\t\tFRGST as string,\n\t\tFRGZU as string,\n\t\tKNTTP as string,\n\t\tLFDAT as date,\n\t\tLGORT as string,\n\t\tLOAD_DATETIME as date,\n\t\tLOEKZ as string,\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tMEINS as string,\n\t\tMENGE as decimal(13,3),\n\t\tPEINH as integer,\n\t\tPREIS as decimal(11,2),\n\t\tPRIO_URG as integer,\n\t\tPSTYP as string,\n\t\tRLWRT as decimal(15,2),\n\t\tSTATU as string,\n\t\tTXZ01 as string,\n\t\tWAERS as string,\n\t\tWERKS as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EBAN\nsource(output(\n\t\t{PR No} as string,\n\t\t{PR Ln} as string,\n\t\t{PR Release Date} as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> PRRELEASEDATE\nsource(output(\n\t\t{PO No} as string,\n\t\t{PO Release Date} as date,\n\t\tSKEY as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> PORELEASEDATE\nSelectRenameColumnsEKKO, SelectRenameColumnsEKPO join(EBELN == {PO No},\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> EKKOEKPOJN\nEKPO select(mapColumn(\n\t\t{PO Changed Date} = AEDAT,\n\t\t{PO RFQ No} = ANFNR,\n\t\t{PO RFQ Ln} = ANFPS,\n\t\t{PO Tracking Number} = BEDNR,\n\t\t{PO Gross Value} = BRTWR,\n\t\t{PO No} = EBELN,\n\t\t{PO Ln} = EBELP,\n\t\t{PO Inbound Complete} = ELIKZ,\n\t\t{PO Latest GR Date} = LEWED,\n\t\t{PO Deletion Ind} = LOEKZ,\n\t\t{PO UOM} = MEINS,\n\t\t{PO Qty} = MENGE,\n\t\t{PO Net Price} = NETPR,\n\t\t{PO Net Order Value} = NETWR,\n\t\t{PO Price Unit} = PEINH,\n\t\t{PO Item Category} = PSTYP,\n\t\t{PO Status} = STATU,\n\t\t{PO Desc} = TXZ01\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumnsEKPO\nEKKO select(mapColumn(\n\t\t{PO Created Date} = AEDAT,\n\t\t{PO Document Date} = BEDAT,\n\t\t{PO Document Type} = BSART,\n\t\t{PO Doc Category} = BSTYP,\n\t\t{PO Downpayment Amount} = DPAMT,\n\t\t{PO Downpayment Due Date} = DPDAT,\n\t\t{PO Downpayment Perc} = DPPCT,\n\t\t{PO Downpayment Type} = DPTYP,\n\t\tEBELN,\n\t\t{PO Purchasing Org} = EKORG,\n\t\t{PO Created By} = ERNAM,\n\t\t{PO Incoterms1} = INCO1,\n\t\t{PO Incoterms2} = INCO2,\n\t\t{PO Currency} = WAERS,\n\t\t{PO Exchange Rate} = WKURS,\n\t\t{PO Payment Ind} = ZBD1T,\n\t\t{PO Payment Terms} = ZTERM\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumnsEKKO\nEKET select(mapColumn(\n\t\tEBELN,\n\t\tEBELP,\n\t\t{PO Scheduled Date} = EINDT,\n\t\t{PO Statistical Delivery Date} = SLFDT\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumnsEKET\nEKKOEKPOJN, SelectRenameColumnsEKET join({PO No} == SelectRenameColumnsEKET@EBELN\n\t&& {PO Ln} == EBELP,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> EKETJN\nEKETJN select(mapColumn(\n\t\t{PO Created Date},\n\t\t{PO Document Date},\n\t\t{PO Document Type},\n\t\t{PO Doc Category},\n\t\t{PO Downpayment Amount},\n\t\t{PO Downpayment Due Date},\n\t\t{PO Downpayment Perc},\n\t\t{PO Downpayment Type},\n\t\t{PO Purchasing Org},\n\t\t{PO Created By},\n\t\t{PO Incoterms1},\n\t\t{PO Incoterms2},\n\t\t{PO Currency},\n\t\t{PO Exchange Rate},\n\t\t{PO Payment Ind},\n\t\t{PO Payment Terms},\n\t\t{PO Changed Date},\n\t\t{PO RFQ No},\n\t\t{PO RFQ Ln},\n\t\t{PO Tracking Number},\n\t\t{PO Gross Value},\n\t\t{PO No},\n\t\t{PO Ln},\n\t\t{PO Inbound Complete},\n\t\t{PO Latest GR Date},\n\t\t{PO Deletion Ind},\n\t\t{PO UOM},\n\t\t{PO Qty},\n\t\t{PO Net Price},\n\t\t{PO Net Order Value},\n\t\t{PO Price Unit},\n\t\t{PO Item Category},\n\t\t{PO Status},\n\t\t{PO Desc},\n\t\t{PO Scheduled Date},\n\t\t{PO Statistical Delivery Date}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectColumns\nSelectColumns derive({PO Doc Category} = case({PO Doc Category}==\"A\",\"RFQ\",{PO Doc Category}==\"F\",\"PO\",{PO Doc Category}==\"W\",\"Created via AT\",{PO Doc Category}==\"K\",\"Contract\",{PO Doc Category}==\"L\",\"Schd Agrmnt\",{PO Doc Category}),\n\t\t{PO Status} = case({PO Status}==\"A\",\"Quotation Exists\",{PO Status}==\"V\",\"Created via SD\",{PO Status}==\"W\",\"Created via AT\",{PO Status}==\"F\",\"Created via PO\",isNull({PO Status}),\"No Quotation Exists\",{PO Status}),\n\t\t{PO Inbound Complete} = iif({PO Inbound Complete}==\"X\",\"Yes\",\"No\"),\n\t\t{PO Item Category} = iif({PO Item Category}==\"9\",\"Service\", \"Material\"),\n\t\t{PO Deletion Ind} = iif({PO Deletion Ind}==\"X\",\"Deleted\",\"Active\"),\n\t\t{PO No} = ltrim({PO No},\"0\"),\n\t\t{PO Ln} = toString({PO Ln})) ~> ReplaceValues\nSelectRenameColumns filter(BEWTP==\"E\") ~> FilterBEWTP\nEKBE select(mapColumn(\n\t\tBEWTP,\n\t\tEBELN,\n\t\tEBELP,\n\t\t{GR Qty} = MENGE,\n\t\tSHKZG,\n\t\t{GR Value} = WRBTR\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumns\nFilterBEWTP derive({GR Qty} = iif(SHKZG==\"H\", {GR Qty}*-1,{GR Qty}),\n\t\tEBELP = toString({EBELP})) ~> DerivedColumn1\nDerivedColumn1 aggregate(groupBy(EBELN,\n\t\tEBELP),\n\t{GR Qty} = sum({GR Qty})) ~> GroupByGRQuantity\nPOReleaseDateJN, GroupByGRQuantity join(ReplaceValues@{PO No} == EBELN\n\t&& {PO Ln} == EBELP,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> POGRJN\nEKBEInvoice select(mapColumn(\n\t\tBEWTP,\n\t\tEBELN,\n\t\tEBELP,\n\t\t{Invoice Qty} = MENGE,\n\t\tSHKZG,\n\t\t{Invoice Value} = WRBTR\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumns2\nSelectRenameColumns2 filter(BEWTP==\"Q\") ~> FilterBETWP\nFilterBETWP derive({Invoice Qty} = iif(SHKZG==\"H\",{Invoice Qty}*-1,{Invoice Qty}),\n\t\t{Invoice Value} = iif(SHKZG==\"H\", {Invoice Value}*-1,{Invoice Value}),\n\t\tEBELP = toString(EBELP)) ~> DerivedColumn2\nDerivedColumn2 aggregate(groupBy(EBELN,\n\t\tEBELP),\n\t{Invoice Qty} = sum({Invoice Qty}),\n\t\t{Invoice Value} = sum({Invoice Value})) ~> GroupByInvoiceQtyValue\nPOGRJN, GroupByInvoiceQtyValue join(ReplaceValues@{PO No} == GroupByInvoiceQtyValue@EBELN\n\t&& {PO Ln} == GroupByInvoiceQtyValue@EBELP,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> POInvoiceJN\nLIPSPROC select(mapColumn(\n\t\t{Inbound Qty} = LFIMG,\n\t\tVGBEL,\n\t\tVGPOS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumns3\nSelectRenameColumns3 derive(VGPOS = toString({VGPOS})) ~> DerivedColumn3\nDerivedColumn3 aggregate(groupBy(VGBEL,\n\t\tVGPOS),\n\t{Inbound Qty} = sum({Inbound Qty})) ~> GroupByInboundQty\nPOInvoiceJN, GroupByInboundQty join(ReplaceValues@{PO No} == VGBEL\n\t&& {PO Ln} == VGPOS,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> POInboundJN\nEBAN select(mapColumn(\n\t\tBANFN,\n\t\tBNFPO,\n\t\tEBELN,\n\t\tEBELP,\n\t\t{PR Net Order Value} = RLWRT\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumns4\nSelectRenameColumns4 derive(BNFPO = toString(BNFPO),\n\t\tEBELP = toString(EBELP),\n\t\tBANFN = ltrim(BANFN,\"0\")) ~> DerivedColumn4\nDerivedColumn4, PRRELEASEDATE join(BANFN == {PR No}\n\t&& BNFPO == {PR Ln},\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinPRReleaseDate\nPOInboundJN, JoinPRReleaseDate join(ReplaceValues@{PO No} == SelectRenameColumns4@EBELN\n\t&& {PO Ln} == DerivedColumn4@EBELP,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> POPRreleaseDateJN\nPOPRreleaseDateJN derive({PR to PO Cycle Time} = {PO Created Date}-{PR Release Date},\n\t\t{Yet to Receive Qty} = {PO Qty}-{GR Qty},\n\t\t{In Transit Qty} = {Inbound Qty}-{GR Qty},\n\t\t{PO CKey} = iifNull(ltrim(concat(ReplaceValues@{PO No}, {PO Ln}),\"0\"),\"-1\",ltrim(concat(ReplaceValues@{PO No}, {PO Ln}),\"0\")),\n\t\t{Purchase Price Variance} = {PO Net Order Value}-{PR Net Order Value},\n\t\t{Invoice Pending Amount} = {PO Gross Value}-{Invoice Value},\n\t\t{Yet to be Shipped Qty} = {PO Qty}-{Inbound Qty}) ~> Measures\nMeasures select(mapColumn(\n\t\t{PO Created Date},\n\t\t{PO Document Date},\n\t\t{PO Document Type},\n\t\t{PO Doc Category},\n\t\t{PO Downpayment Amount},\n\t\t{PO Downpayment Due Date},\n\t\t{PO Downpayment Perc},\n\t\t{PO Downpayment Type},\n\t\t{PO Purchasing Org},\n\t\t{PO Created By},\n\t\t{PO Incoterms1},\n\t\t{PO Incoterms2},\n\t\t{PO Currency},\n\t\t{PO Exchange Rate},\n\t\t{PO Payment Ind},\n\t\t{PO Payment Terms},\n\t\t{PO Changed Date},\n\t\t{PO RFQ No},\n\t\t{PO RFQ Ln},\n\t\t{PO Tracking Number},\n\t\t{PO Gross Value},\n\t\t{PO No} = ReplaceValues@{PO No},\n\t\t{PO Ln},\n\t\t{PO Inbound Complete},\n\t\t{PO Latest GR Date},\n\t\t{PO Deletion Ind},\n\t\t{PO UOM},\n\t\t{PO Qty},\n\t\t{PO Net Price},\n\t\t{PO Net Order Value},\n\t\t{PO Price Unit},\n\t\t{PO Item Category},\n\t\t{PO Status},\n\t\t{PO Desc},\n\t\t{PO Scheduled Date},\n\t\t{PO Statistical Delivery Date},\n\t\t{GR Qty},\n\t\t{Invoice Qty},\n\t\t{Invoice Value},\n\t\t{Inbound Qty},\n\t\t{PR Net Order Value},\n\t\t{PR No},\n\t\t{PR Ln},\n\t\t{PR Release Date},\n\t\t{PR to PO Cycle Time},\n\t\t{Yet to Receive Qty},\n\t\t{In Transit Qty},\n\t\t{Purchase Price Variance},\n\t\t{Invoice Pending Amount},\n\t\t{Yet to be Shipped Qty},\n\t\t{PO Release Date},\n\t\t{PO CKey}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRequiredColumns\nSelectRequiredColumns keyGenerate(output({PO SKey} as long),\n\tstartAt: 1L) ~> SurrogateKey\nFilter1, PORELEASEDATE join(ReplaceValues@{PO No} == PORELEASEDATE@{PO No},\n\tjoinType:'left',\n\tbroadcast: 'auto')~> POReleaseDateJN\nReplaceValues filter({PO Doc Category}==\"PO\") ~> Filter1\nSurrogateKey sink(input(\n\t\t{PO Created Date} as date,\n\t\t{PO Document Date} as date,\n\t\t{PO Document Type} as string,\n\t\t{PO Doc Category} as string,\n\t\t{PO Downpayment Amount} as decimal(11,2),\n\t\t{PO Downpayment Due Date} as date,\n\t\t{PO Downpayment Perc} as decimal(5,2),\n\t\t{PO Downpayment Type} as string,\n\t\t{PO Purchasing Org} as string,\n\t\t{PO Created By} as string,\n\t\t{PO Incoterms1} as string,\n\t\t{PO Incoterms2} as string,\n\t\t{PO Currency} as string,\n\t\t{PO Exchange Rate} as decimal(9,5),\n\t\t{PO Payment Ind} as integer,\n\t\t{PO Payment Terms} as string,\n\t\t{PO Changed Date} as date,\n\t\t{PO RFQ No} as string,\n\t\t{PO RFQ Ln} as integer,\n\t\t{PO Tracking Number} as string,\n\t\t{PO Gross Value} as decimal(13,2),\n\t\t{PO No} as string,\n\t\t{PO Ln} as string,\n\t\t{PO Inbound Complete} as string,\n\t\t{PO Latest GR Date} as date,\n\t\t{PO Deletion Ind} as string,\n\t\t{PO UOM} as string,\n\t\t{PO Qty} as decimal(13,3),\n\t\t{PO Net Price} as decimal(11,2),\n\t\t{PO Net Value} as decimal(13,2),\n\t\t{PO Price Unit} as integer,\n\t\t{PO Item Category} as string,\n\t\t{PO Status} as string,\n\t\t{PO Desc} as string,\n\t\t{PO Scheduled Date} as date,\n\t\t{PO Statistical Delivery Date} as date,\n\t\t{GR Qty} as decimal(34,3),\n\t\t{Invoice Qty} as decimal(34,3),\n\t\t{Invoice Value} as decimal(34,2),\n\t\t{Inbound Qty} as decimal(23,3),\n\t\t{PR Net Order Value} as decimal(15,2),\n\t\t{PR No} as string,\n\t\t{PR Ln} as string,\n\t\t{PR Release Date} as date,\n\t\t{PR to PO Cycle Time} as integer,\n\t\t{Yet to Receive Qty} as decimal(35,3),\n\t\t{In Transit Qty} as decimal(35,3),\n\t\t{Purchase Price Variance} as decimal(16,2),\n\t\t{Invoice Pending Amount} as decimal(35,2),\n\t\t{Yet to be Shipped Qty} as decimal(24,3),\n\t\t{PO Release Date} as date,\n\t\t{PO CKey} as string,\n\t\t{PO SKey} as long\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[F_PURCHASEORDER]([PO CKey],[PO SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> FPURCHASEORDER"
+        }
+    }
+}

@@ -1,0 +1,272 @@
+{
+    "name": "F_PurchaseOrder",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcDW"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "PO Created Date",
+                "type": "date"
+            },
+            {
+                "name": "PO Document Date",
+                "type": "date"
+            },
+            {
+                "name": "PO Document Type",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Doc Category",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Downpayment Amount",
+                "type": "decimal",
+                "precision": 11,
+                "scale": 2
+            },
+            {
+                "name": "PO Downpayment Due Date",
+                "type": "date"
+            },
+            {
+                "name": "PO Downpayment Perc",
+                "type": "decimal",
+                "precision": 5,
+                "scale": 2
+            },
+            {
+                "name": "PO Downpayment Type",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Purchasing Org",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Created By",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Incoterms1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Incoterms2",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Currency",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Exchange Rate",
+                "type": "decimal",
+                "precision": 9,
+                "scale": 5
+            },
+            {
+                "name": "PO Payment Ind",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "PO Payment Terms",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Changed Date",
+                "type": "date"
+            },
+            {
+                "name": "PO RFQ No",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO RFQ Ln",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "PO Tracking Number",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Gross Value",
+                "type": "decimal",
+                "precision": 13,
+                "scale": 2
+            },
+            {
+                "name": "PO No",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Ln",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Inbound Complete",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Latest GR Date",
+                "type": "date"
+            },
+            {
+                "name": "PO Deletion Ind",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO UOM",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Qty",
+                "type": "decimal",
+                "precision": 13,
+                "scale": 3
+            },
+            {
+                "name": "PO Net Price",
+                "type": "decimal",
+                "precision": 11,
+                "scale": 2
+            },
+            {
+                "name": "PO Net Value",
+                "type": "decimal",
+                "precision": 13,
+                "scale": 2
+            },
+            {
+                "name": "PO Price Unit",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "PO Item Category",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Status",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Desc",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO Scheduled Date",
+                "type": "date"
+            },
+            {
+                "name": "PO Statistical Delivery Date",
+                "type": "date"
+            },
+            {
+                "name": "GR Qty",
+                "type": "decimal",
+                "precision": 34,
+                "scale": 3
+            },
+            {
+                "name": "Invoice Qty",
+                "type": "decimal",
+                "precision": 34,
+                "scale": 3
+            },
+            {
+                "name": "Invoice Value",
+                "type": "decimal",
+                "precision": 34,
+                "scale": 2
+            },
+            {
+                "name": "Inbound Qty",
+                "type": "decimal",
+                "precision": 23,
+                "scale": 3
+            },
+            {
+                "name": "PR Net Order Value",
+                "type": "decimal",
+                "precision": 15,
+                "scale": 2
+            },
+            {
+                "name": "PR No",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PR Ln",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PR Release Date",
+                "type": "date"
+            },
+            {
+                "name": "PR to PO Cycle Time",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "Yet to Receive Qty",
+                "type": "decimal",
+                "precision": 35,
+                "scale": 3
+            },
+            {
+                "name": "In Transit Qty",
+                "type": "decimal",
+                "precision": 35,
+                "scale": 3
+            },
+            {
+                "name": "Purchase Price Variance",
+                "type": "decimal",
+                "precision": 16,
+                "scale": 2
+            },
+            {
+                "name": "Invoice Pending Amount",
+                "type": "decimal",
+                "precision": 35,
+                "scale": 2
+            },
+            {
+                "name": "Yet to be Shipped Qty",
+                "type": "decimal",
+                "precision": 24,
+                "scale": 3
+            },
+            {
+                "name": "PO Release Date",
+                "type": "date"
+            },
+            {
+                "name": "PO CKey",
+                "type": "nvarchar"
+            },
+            {
+                "name": "PO SKey",
+                "type": "bigint",
+                "precision": 19
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "F_PurchaseOrder"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,20 @@
+{
+    "name": "D_PLANT",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcDW"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "D_Plant"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

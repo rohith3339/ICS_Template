@@ -1,0 +1,41 @@
+{
+    "name": "D_PURCHASINGGROUP_DF",
+    "properties": {
+        "folder": {
+            "name": "SAPECCProcurementFD"
+        },
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "T024",
+                        "type": "DatasetReference"
+                    },
+                    "name": "T024"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "D_PurchasingGroup",
+                        "type": "DatasetReference"
+                    },
+                    "name": "PurchasingGroupSink"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "RenameColumns"
+                },
+                {
+                    "name": "PurchasingGroupCKey"
+                },
+                {
+                    "name": "PurchasingGroupSKey"
+                }
+            ],
+            "script": "source(output(\n\t\tEKGRP as string,\n\t\tEKNAM as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> T024\nT024 select(mapColumn(\n\t\t{Purchasing Group No} = EKGRP,\n\t\t{Purchasing Group Name} = EKNAM\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nRenameColumns select(mapColumn(\n\t\t{Purchasing Group No},\n\t\t{Purchasing Group Name},\n\t\t{Purchasing Group CKey} = {Purchasing Group No}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> PurchasingGroupCKey\nPurchasingGroupCKey keyGenerate(output({Purchasing Group SKey} as long),\n\tstartAt: 1L) ~> PurchasingGroupSKey\nPurchasingGroupSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[D_PURCHASINGGROUP]([Purchasing Group CKey],[Purchasing Group SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> PurchasingGroupSink"
+        }
+    }
+}

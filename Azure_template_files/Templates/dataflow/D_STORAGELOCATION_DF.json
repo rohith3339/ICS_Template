@@ -1,0 +1,41 @@
+{
+    "name": "D_STORAGELOCATION_DF",
+    "properties": {
+        "folder": {
+            "name": "SAPECCProcurementFD"
+        },
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "T001L",
+                        "type": "DatasetReference"
+                    },
+                    "name": "T001L"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "D_StorageLocation",
+                        "type": "DatasetReference"
+                    },
+                    "name": "StorageLocationSink"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "RenameColumns"
+                },
+                {
+                    "name": "StorageLocationSKey"
+                },
+                {
+                    "name": "Concatenation"
+                }
+            ],
+            "script": "source(output(\n\t\tLGOBE as string,\n\t\tLGORT as string,\n\t\tWERKS as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> T001L\nT001L select(mapColumn(\n\t\t{Storage Description} = LGOBE,\n\t\t{Storage Location} = LGORT,\n\t\t{Plant No} = WERKS\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nConcatenation keyGenerate(output({Storage Location SKey} as long),\n\tstartAt: 1L) ~> StorageLocationSKey\nRenameColumns derive({Storage Location Key} = concat(ltrim({Storage Location},'0'), ltrim({Plant No}, '0')),\n\t\t{Storage Location CKey} = concat(ltrim({Storage Location},'0'), ltrim({Plant No}, '0'))) ~> Concatenation\nStorageLocationSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[D_STORAGELOCATION]([Storage Location CKey],[Storage Location SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StorageLocationSink"
+        }
+    }
+}

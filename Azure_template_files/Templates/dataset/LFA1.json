@@ -1,0 +1,43 @@
+{
+    "name": "LFA1",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcSource"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "LAND1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LIFNR",
+                "type": "nvarchar"
+            },
+            {
+                "name": "NAME1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ORT01",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LOAD_DATETIME",
+                "type": "smalldatetime",
+                "precision": 16,
+                "scale": 0
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "LFA1"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

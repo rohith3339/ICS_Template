@@ -1,0 +1,16 @@
+{
+    "name": "OrgBIDemoIR",
+    "properties": {
+        "type": "Managed",
+        "typeProperties": {
+            "computeProperties": {
+                "location": "East US 2",
+                "dataFlowProperties": {
+                    "computeType": "General",
+                    "coreCount": 16,
+                    "timeToLive": 10
+                }
+            }
+        }
+    }
+}

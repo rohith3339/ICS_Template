@@ -1,0 +1,20 @@
+{
+    "name": "D_Material",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "orgbidw",
+            "type": "LinkedServiceReference"
+        },
+        "folder": {
+            "name": "SAPECCProcDW"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "D_Material"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
