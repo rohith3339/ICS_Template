@@ -1,0 +1,26 @@
+{
+	"name": "Rohith_Test",
+	"properties": {
+		"description": "Used to schedule a pipeline",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ROHITH_PL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2020-11-24T02:00:00",
+				"endTime": "2020-11-25T22:00:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

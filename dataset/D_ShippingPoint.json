@@ -1,0 +1,20 @@
+{
+	"name": "D_ShippingPoint",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbisalesfin",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCDW"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "D_ShippingPoint"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

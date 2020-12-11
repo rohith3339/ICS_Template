@@ -1,0 +1,57 @@
+{
+	"name": "EKET",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "BANFN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BNFPO",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "EBELN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EBELP",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "EINDT",
+				"type": "date"
+			},
+			{
+				"name": "EKET_SCHLN_KEY",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SLFDT",
+				"type": "date"
+			},
+			{
+				"name": "LOAD_DATETIME",
+				"type": "smalldatetime",
+				"precision": 16,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EKET"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

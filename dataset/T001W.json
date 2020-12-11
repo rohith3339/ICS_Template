@@ -1,0 +1,35 @@
+{
+	"name": "T001W",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "NAME1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "WERKS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LOAD_DATETIME",
+				"type": "smalldatetime",
+				"precision": 16,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "T001W"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

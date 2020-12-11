@@ -1,0 +1,44 @@
+{
+	"name": "D_DIVISON_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TSPAT",
+						"type": "DatasetReference"
+					},
+					"name": "TSPAT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_Divison",
+						"type": "DatasetReference"
+					},
+					"name": "DDivison"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "DivisonSKey"
+				},
+				{
+					"name": "DivisonCKey"
+				},
+				{
+					"name": "FilterLanguage"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tSPRAS as string,\n\t\tSPART as string,\n\t\tVTEXT as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> TSPAT\nFilterLanguage select(mapColumn(\n\t\t{Divison Code} = SPART,\n\t\t{Divison Description} = VTEXT\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nDivisonCKey keyGenerate(output({Divison SKey} as long),\n\tstartAt: 1L) ~> DivisonSKey\nRequiredColumns select(mapColumn(\n\t\t{Divison Code},\n\t\t{Divison Description},\n\t\t{Divison CKey} = {Divison Code}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> DivisonCKey\nTSPAT filter(SPRAS=='E') ~> FilterLanguage\nDivisonSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DDivison"
+		}
+	}
+}

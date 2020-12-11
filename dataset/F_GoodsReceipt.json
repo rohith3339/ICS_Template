@@ -1,0 +1,20 @@
+{
+	"name": "F_GoodsReceipt",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCDW"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "F_GoodsReceipt"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

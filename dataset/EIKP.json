@@ -1,0 +1,29 @@
+{
+	"name": "EIKP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EXNUM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EXPVZ",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EIKP"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

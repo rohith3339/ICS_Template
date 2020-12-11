@@ -1,0 +1,263 @@
+{
+	"name": "Content_Deployment",
+	"properties": {
+		"activities": [
+			{
+				"name": "Creating Module Workspace",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "PowerBI Authentication",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://api.powerbi.com/v1.0/myorg/groups?workspaceV2=True",
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('PowerBI Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": {
+						"value": "@concat('name=',pipeline().parameters.factoryName,substring(pipeline().parameters.Module,0,5),'DatasetWS')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "PowerBI Authentication",
+				"description": "Used to get a token from the Azure directory to initiate the API calling with the returned token.",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": true,
+					"secureInput": true
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://login.microsoftonline.com/62e4d6a7-18d9-4328-a4d9-22e69ebc37e2/oauth2/v2.0/token",
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": "client_id=c3dd2eb1-cd63-4acd-bb6b-79af6b9c1b0a\n&scope=https://analysis.windows.net/powerbi/api/.default\n&grant_type=client_credentials \n&client_secret=4rFk_zsaYT8P~IH-.liXzc.P0S531633GM "
+				}
+			},
+			{
+				"name": "Azure Graph Authentication",
+				"description": "Used to get a token from the Azure directory to initiate the API calling with the returned token.",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": true,
+					"secureInput": true
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://login.microsoftonline.com/62e4d6a7-18d9-4328-a4d9-22e69ebc37e2/oauth2/v2.0/token",
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": "client_id=c3dd2eb1-cd63-4acd-bb6b-79af6b9c1b0a\n&scope=https://graph.microsoft.com/.default\n&grant_type=client_credentials \n&client_secret=4rFk_zsaYT8P~IH-.liXzc.P0S531633GM "
+				}
+			},
+			{
+				"name": "Creating Viewers Group",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Creating Module Workspace",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Azure Graph Authentication",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://graph.microsoft.com/v1.0/groups",
+					"method": "POST",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('Azure Graph Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-type": "application/json"
+					},
+					"body": {
+						"value": "{\"displayName\":\"@{concat(pipeline().parameters.factoryName,substring(pipeline().parameters.Module,0,5),'VIEWGRP')}\",\n \"mailEnabled\":\"False\",\n \"mailNickname\":\"@{concat(pipeline().parameters.factoryName,'VIEWERS-Intellicompute')}\",\n \"securityEnabled\":\"True\",\n \"visibility\":\"Public\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Creating Contibuters Group",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Creating Viewers Group",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://graph.microsoft.com/v1.0/groups",
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json",
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('Azure Graph Authentication').output.access_token))",
+							"type": "Expression"
+						}
+					},
+					"body": {
+						"value": "{\"displayName\":\"@{concat(pipeline().parameters.factoryName,substring(pipeline().parameters.Module,0,5),'EDITGRP')}\",\n \"mailEnabled\":\"False\",\n \"mailNickname\":\"@{concat(pipeline().parameters.factoryName,'CONTRIBUTERS-Intellicompute')}\",\n \"securityEnabled\":\"True\",\n \"visibility\":\"Public\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Access View Groups To WS",
+				"description": "HereWe  are giving Acess to the POWER BI WORKSPACE.",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Creating Contibuters Group",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://api.powerbi.com/v1.0/myorg/groups/',activity('Creating Module Workspace').output.id,'/users')",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('PowerBI Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"value": "{\"groupUserAccessRight\":\"Viewer\",\n \"identifier\": \"@{activity('Creating Viewers Group').output.id}\",\n  \"principalType\": \"Group\"}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Access Contributer Group To WS",
+				"description": "HereWe  are giving Acess to the POWER BI WORKSPACE.",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Access View Groups To WS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://api.powerbi.com/v1.0/myorg/groups/',activity('Creating Module Workspace').output.id,'/users')",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('PowerBI Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"value": "{\"groupUserAccessRight\":\"Viewer\",\n \"identifier\": \"@{activity('Creating Contibuters Group').output.id}\",\n  \"principalType\": \"Group\"}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"factoryName": {
+				"type": "string"
+			},
+			"Module": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-12-03T10:38:49Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

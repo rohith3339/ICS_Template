@@ -1,0 +1,44 @@
+{
+	"name": "D_SALESGROUP_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TVGRT",
+						"type": "DatasetReference"
+					},
+					"name": "TVGRT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_SalesGroup",
+						"type": "DatasetReference"
+					},
+					"name": "DSalesGroup"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "SalesGroupSKey"
+				},
+				{
+					"name": "FilterLanguage"
+				},
+				{
+					"name": "SalesGroupCKey"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tSPRAS as string,\n\t\tVKGRP as string,\n\t\tBEZEI as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> TVGRT\nFilterLanguage select(mapColumn(\n\t\t{Sales Group Code} = VKGRP,\n\t\t{Sales Group Description} = BEZEI\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nSalesGroupCKey keyGenerate(output({Sales Group SKey} as long),\n\tstartAt: 1L) ~> SalesGroupSKey\nTVGRT filter(SPRAS=='E') ~> FilterLanguage\nRequiredColumns derive({Sales Group Code} = ltrim({Sales Group Code}, '0'),\n\t\t{Sales Group CKey} = ltrim({Sales Group Code}, '0')) ~> SalesGroupCKey\nSalesGroupSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DSalesGroup"
+		}
+	}
+}

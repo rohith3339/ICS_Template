@@ -1,0 +1,495 @@
+{
+	"name": "SAPECCPROCUREMENT_PP",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_MATERIAL_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "D_VENDOR_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "D_MATERIAL_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "D_COMPANY_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "D_COMPANY_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "D_MATERIALGROUP_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "DIM_MATERIAL_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "D_MATERIALGROUP_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "D_PURCHASINGGROUP_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "D_MATERIALGROUP_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "D_PURCHASINGGROUP_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "D_PLANT_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "D_COMPANY_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "D_PLANT_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "D_STORAGELOCATION_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "D_PURCHASINGGROUP_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "D_STORAGELOCATION_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "D_VENDOR_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "D_PLANT_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "D_VENDOR_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "I_PORELEASEDATE_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "I_PRRELEASEDATE_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "I_PORELEASEDATE_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "I_PRRELEASEDATE_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "I_PRRELEASEDATE_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "F_GOODSRECEIPT_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "F_PURCHASEINBOUND_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_GOODSRECEIPT_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "F_PURCHASECENTRAL_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "F_GOODSRECEIPT_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASECENTRAL_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "F_PURCHASEINBOUND_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "F_PURCHASEORDER_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASEINBOUND_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "F_PURCHASEORDER_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "F_PURCHASEREQUISITION_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASEORDER_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "F_PURCHASERFQ_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "D_STORAGELOCATION_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASERFQ_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "F_PURCHASESES_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "F_PURCHASERFQ_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASESES_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			},
+			{
+				"name": "F_PURCHASEREQUISITION_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "I_PORELEASEDATE_DF",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASEREQUISITION_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDemoIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Coarse"
+				}
+			}
+		],
+		"folder": {
+			"name": "SAPECCProcurementFD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-12-03T10:41:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,63 @@
+{
+	"name": "LIPS_PROC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ARKTX",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LFIMG",
+				"type": "decimal",
+				"precision": 13,
+				"scale": 3
+			},
+			{
+				"name": "MATKL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MATNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NETWR",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 2
+			},
+			{
+				"name": "POSNR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VBELN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VGBEL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VGPOS",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "LIPS_PROC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

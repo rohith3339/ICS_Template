@@ -1,0 +1,41 @@
+{
+	"name": "D_CUSTOMER_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "KNA1",
+						"type": "DatasetReference"
+					},
+					"name": "KNA1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_Customer",
+						"type": "DatasetReference"
+					},
+					"name": "DCustomer"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "CustomerSKey"
+				},
+				{
+					"name": "CustomerCKey"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tKUNNR as string,\n\t\tLAND1 as string,\n\t\tNAME1 as string,\n\t\tNAME2 as string,\n\t\tORT01 as string,\n\t\tPSTLZ as string,\n\t\tREGIO as string,\n\t\tSORTL as string,\n\t\tSTRAS as string,\n\t\tTELF1 as string,\n\t\tTELFX as string,\n\t\tXCPDK as string,\n\t\tADRNR as string,\n\t\tMCOD1 as string,\n\t\tMCOD2 as string,\n\t\tMCOD3 as string,\n\t\tANRED as string,\n\t\tAUFSD as string,\n\t\tBAHNE as string,\n\t\tBAHNS as string,\n\t\tBBBNR as decimal(7,0),\n\t\tBBSNR as decimal(5,0),\n\t\tBEGRU as string,\n\t\tBRSCH as string,\n\t\tBUBKZ as decimal(1,0),\n\t\tDATLT as string,\n\t\tERDAT as date,\n\t\tERNAM as string,\n\t\tEXABL as string,\n\t\tFAKSD as string,\n\t\tFISKN as string,\n\t\tKNAZK as string,\n\t\tKNRZA as string,\n\t\tKONZS as string,\n\t\tKTOKD as string,\n\t\tKUKLA as string,\n\t\tLIFNR as string,\n\t\tLIFSD as string,\n\t\tLOCCO as string,\n\t\tLOEVM as string,\n\t\tNAME3 as string,\n\t\tNAME4 as string,\n\t\tNIELS as string,\n\t\tORT02 as string,\n\t\tPFACH as string,\n\t\tPSTL2 as string,\n\t\tCOUNC as string,\n\t\tCITYC as string,\n\t\tRPMKR as string,\n\t\tSPERR as string,\n\t\tSPRAS as string,\n\t\tSTCD1 as string,\n\t\tSTCD2 as string,\n\t\tSTKZA as string,\n\t\tSTKZU as string,\n\t\tTELBX as string,\n\t\tTELF2 as string,\n\t\tTELTX as string,\n\t\tTELX1 as string,\n\t\tLZONE as string,\n\t\tXZEMP as string,\n\t\tVBUND as string,\n\t\tSTCEG as string,\n\t\tDEAR1 as string,\n\t\tDEAR2 as string,\n\t\tDEAR3 as string,\n\t\tDEAR4 as string,\n\t\tDEAR5 as string,\n\t\tGFORM as string,\n\t\tBRAN1 as string,\n\t\tBRAN2 as string,\n\t\tBRAN3 as string,\n\t\tBRAN4 as string,\n\t\tBRAN5 as string,\n\t\tEKONT as string,\n\t\tUMSAT as decimal(8,2),\n\t\tUMJAH as decimal(4,0),\n\t\tUWAER as string,\n\t\tJMZAH as decimal(6,0),\n\t\tJMJAH as decimal(4,0),\n\t\tKATR1 as string,\n\t\tKATR2 as string,\n\t\tKATR3 as string,\n\t\tKATR4 as string,\n\t\tKATR5 as string,\n\t\tKATR6 as string,\n\t\tKATR7 as string,\n\t\tKATR8 as string,\n\t\tKATR9 as string,\n\t\tKATR10 as string,\n\t\tSTKZN as string,\n\t\tUMSA1 as decimal(15,2),\n\t\tTXJCD as string,\n\t\tPERIV as string,\n\t\tABRVW as string,\n\t\tINSPBYDEBI as string,\n\t\tINSPATDEBI as string,\n\t\tKTOCD as string,\n\t\tPFORT as string,\n\t\tWERKS as string,\n\t\tDTAMS as string,\n\t\tDTAWS as string,\n\t\tDUEFL as string,\n\t\tHZUOR as decimal(2,0),\n\t\tSPERZ as string,\n\t\tETIKG as string,\n\t\tCIVVE as string,\n\t\tMILVE as string,\n\t\tKDKG1 as string,\n\t\tKDKG2 as string,\n\t\tKDKG3 as string,\n\t\tKDKG4 as string,\n\t\tKDKG5 as string,\n\t\tXKNZA as string,\n\t\tFITYP as string,\n\t\tSTCDT as string,\n\t\tSTCD3 as string,\n\t\tSTCD4 as string,\n\t\tSTCD5 as string,\n\t\tXICMS as string,\n\t\tXXIPI as string,\n\t\tXSUBT as string,\n\t\tCFOPC as string,\n\t\tTXLW1 as string,\n\t\tTXLW2 as string,\n\t\tCCC01 as string,\n\t\tCCC02 as string,\n\t\tCCC03 as string,\n\t\tCCC04 as string,\n\t\tCASSD as string,\n\t\tKNURL as string,\n\t\tJ_1KFREPRE as string,\n\t\tJ_1KFTBUS as string,\n\t\tJ_1KFTIND as string,\n\t\tCONFS as string,\n\t\tUPDAT as date,\n\t\tUPTIM as string,\n\t\tNODEL as string,\n\t\tDEAR6 as string,\n\t\tSUFRAMA as string,\n\t\tRG as string,\n\t\tEXP as string,\n\t\tUF as string,\n\t\tRGDATE as date,\n\t\tRIC as decimal(11,0),\n\t\tRNE as string,\n\t\tRNEDATE as date,\n\t\tCNAE as string,\n\t\tLEGALNAT as decimal(4,0),\n\t\tCRTN as string,\n\t\tICMSTAXPAY as string,\n\t\tINDTYP as string,\n\t\tTDT as string,\n\t\tCOMSIZE as string,\n\t\tDECREGPC as string,\n\t\t{/VSO/R_PALHGT} as decimal(13,3),\n\t\t{/VSO/R_PAL_UL} as string,\n\t\t{/VSO/R_PK_MAT} as string,\n\t\t{/VSO/R_MATPAL} as string,\n\t\t{/VSO/R_I_NO_LYR} as decimal(2,0),\n\t\t{/VSO/R_ONE_MAT} as string,\n\t\t{/VSO/R_ONE_SORT} as string,\n\t\t{/VSO/R_ULD_SIDE} as decimal(1,0),\n\t\t{/VSO/R_LOAD_PREF} as decimal(1,0),\n\t\t{/VSO/R_DPOINT} as string,\n\t\tALC as string,\n\t\tPMT_OFFICE as string,\n\t\tPSOFG as string,\n\t\tPSOIS as string,\n\t\tPSON1 as string,\n\t\tPSON2 as string,\n\t\tPSON3 as string,\n\t\tPSOVN as string,\n\t\tPSOTL as string,\n\t\tPSOHS as string,\n\t\tPSOST as string,\n\t\tPSOO1 as string,\n\t\tPSOO2 as string,\n\t\tPSOO3 as string,\n\t\tPSOO4 as string,\n\t\tPSOO5 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> KNA1\nKNA1 select(mapColumn(\n\t\t{Customer ID} = KUNNR,\n\t\t{Customer Name} = NAME1,\n\t\t{Customer Country Code} = LAND1\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nCustomerCKey keyGenerate(output({Customer SKey} as long),\n\tstartAt: 1L) ~> CustomerSKey\nRequiredColumns derive({Customer ID} = ltrim({Customer ID}, '0'),\n\t\t{Customer CKey} = ltrim({Customer ID},' 0')) ~> CustomerCKey\nCustomerSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DCustomer"
+		}
+	}
+}

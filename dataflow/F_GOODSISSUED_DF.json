@@ -1,0 +1,44 @@
+{
+	"name": "F_GOODSISSUED_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "VBFA",
+						"type": "DatasetReference"
+					},
+					"name": "VBFA"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "F_GoodsIssued",
+						"type": "DatasetReference"
+					},
+					"name": "FGoodsIssued"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "FilterColumn"
+				},
+				{
+					"name": "GISKey"
+				},
+				{
+					"name": "GICKey"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tVBELV as string,\n\t\tPOSNV as decimal(6,0),\n\t\tVBELN as string,\n\t\tPOSNN as decimal(6,0),\n\t\tVBTYP_N as string,\n\t\tRFMNG as decimal(15,3),\n\t\tMEINS as string,\n\t\tRFWRT as decimal(15,2),\n\t\tWAERS as string,\n\t\tVBTYP_V as string,\n\t\tPLMIN as string,\n\t\tTAQUI as string,\n\t\tERDAT as date,\n\t\tERZET as string,\n\t\tMATNR as string,\n\t\tBWART as string,\n\t\tBDART as string,\n\t\tPLART as string,\n\t\tSTUFE as decimal(2,0),\n\t\tLGNUM as string,\n\t\tAEDAT as date,\n\t\tFKTYP as string,\n\t\tBRGEW as decimal(15,3),\n\t\tGEWEI as string,\n\t\tVOLUM as decimal(15,3),\n\t\tVOLEH as string,\n\t\tFPLNR as string,\n\t\tFPLTR as decimal(6,0),\n\t\tRFMNG_FLO as double,\n\t\tRFMNG_FLT as double,\n\t\tVRKME as string,\n\t\tABGES as double,\n\t\tSOBKZ as string,\n\t\tSONUM as string,\n\t\tKZBEF as string,\n\t\tNTGEW as decimal(13,3),\n\t\tLOGSYS as string,\n\t\tWBSTA as string,\n\t\tCMETH as string,\n\t\tMJAHR as decimal(4,0),\n\t\tVBTYPEXT_V as string,\n\t\tVBTYPEXT_N as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> VBFA\nFilterColumn select(mapColumn(\n\t\t{GI No} = VBELN,\n\t\t{GI Ln} = POSNN,\n\t\t{GI Qty} = RFMNG,\n\t\t{GI Base UOM} = MEINS,\n\t\t{GI Amount In Local Currency} = RFWRT,\n\t\t{GI Currency} = WAERS,\n\t\t{GI Date} = ERDAT,\n\t\t{GI Movement Type} = BWART,\n\t\t{GI Doc Year} = MJAHR\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nVBFA filter(VBTYP_N=='R') ~> FilterColumn\nGICKey keyGenerate(output({GI SKey} as long),\n\tstartAt: 1L) ~> GISKey\nRequiredColumns derive({GI No} = ltrim({GI No}, '0'),\n\t\t{GI CKey} = ltrim({GI No} ,'0')) ~> GICKey\nGISKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> FGoodsIssued"
+		}
+	}
+}

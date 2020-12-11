@@ -1,0 +1,41 @@
+{
+	"name": "D_MATERIALGROUP_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "T023T",
+						"type": "DatasetReference"
+					},
+					"name": "T023T"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_MaterialGroup",
+						"type": "DatasetReference"
+					},
+					"name": "DimMaterialGroup"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RenameColumns"
+				},
+				{
+					"name": "MaterialGroupCKey"
+				},
+				{
+					"name": "MaterialGroupSKey"
+				}
+			],
+			"script": "source(output(\n\t\tMATKL as string,\n\t\tWGBEZ60 as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> T023T\nT023T select(mapColumn(\n\t\t{Material Group No} = MATKL,\n\t\t{Material Group Desc} = WGBEZ60\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nRenameColumns select(mapColumn(\n\t\t{Material Group No},\n\t\t{Material Group Desc},\n\t\t{Material Group CKey} = {Material Group No}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> MaterialGroupCKey\nMaterialGroupCKey keyGenerate(output({Material Group SKey} as long),\n\tstartAt: 1L) ~> MaterialGroupSKey\nMaterialGroupSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[D_MATERIALGROUP]([Material Group CKey],[Material Group SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DimMaterialGroup"
+		}
+	}
+}

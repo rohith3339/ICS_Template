@@ -1,0 +1,54 @@
+{
+	"name": "F_PURCHASEREQUISITION_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "EBAN",
+						"type": "DatasetReference"
+					},
+					"name": "EBAN"
+				},
+				{
+					"dataset": {
+						"referenceName": "I_PRRELEASEDATE",
+						"type": "DatasetReference"
+					},
+					"name": "IPRRELEASEDATE"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "F_PurchaseRequisition",
+						"type": "DatasetReference"
+					},
+					"name": "FPRREQUISITIONS"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "Transformations"
+				},
+				{
+					"name": "PRRELEASEEBANJN"
+				},
+				{
+					"name": "OnlyRequiredColumns"
+				},
+				{
+					"name": "SurrogateKey"
+				}
+			],
+			"script": "source(output(\n\t\tAFNAM as string,\n\t\tBADAT as date,\n\t\tBANFN as string,\n\t\tBEDNR as string,\n\t\tBLCKD as string,\n\t\tBNFPO as integer,\n\t\tBSART as string,\n\t\tBSMNG as decimal(13,3),\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tEKGRP as string,\n\t\tEKORG as string,\n\t\tERDAT as date,\n\t\tERNAM as string,\n\t\tFRGKZ as string,\n\t\tFRGST as string,\n\t\tFRGZU as string,\n\t\tKNTTP as string,\n\t\tLFDAT as date,\n\t\tLGORT as string,\n\t\tLOAD_DATETIME as date,\n\t\tLOEKZ as string,\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tMEINS as string,\n\t\tMENGE as decimal(13,3),\n\t\tPEINH as integer,\n\t\tPREIS as decimal(11,2),\n\t\tPRIO_URG as integer,\n\t\tPSTYP as string,\n\t\tRLWRT as decimal(15,2),\n\t\tSTATU as string,\n\t\tTXZ01 as string,\n\t\tWAERS as string,\n\t\tWERKS as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EBAN\nsource(output(\n\t\t{PR No} as string,\n\t\t{PR Ln} as string,\n\t\t{PR Release Date} as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> IPRRELEASEDATE\nEBAN select(mapColumn(\n\t\tAFNAM,\n\t\tBADAT,\n\t\tBANFN,\n\t\tBEDNR,\n\t\tBLCKD,\n\t\tBNFPO,\n\t\tERDAT,\n\t\tERNAM,\n\t\tFRGKZ,\n\t\tFRGST,\n\t\tFRGZU,\n\t\tLFDAT,\n\t\tLOEKZ,\n\t\tMEINS,\n\t\tMENGE,\n\t\tPEINH,\n\t\tPREIS,\n\t\tPSTYP,\n\t\tRLWRT,\n\t\tSTATU,\n\t\tTXZ01,\n\t\tWAERS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nRequiredColumns derive(BANFN = ltrim(BANFN,'0'),\n\t\tSTATU = iif(STATU=='N', 'Not edited', iif(STATU=='B', 'PO created', iif(STATU=='A', 'RFQ created', iif(STATU=='K', 'Contract created', iif(STATU=='L', 'Sch Agrmnt created', iif(STATU=='S', 'SES created', 'RFQ sent')))))),\n\t\tBLCKD = iif(BLCKD=='1', 'Blocked', 'Not Blocked'),\n\t\tLOEKZ = iif(LOEKZ=='X', 'Deleted', 'Active'),\n\t\tPSTYP = iif(PSTYP=='9' , 'Service' , 'Material'),\n\t\tBNFPO = toString(BNFPO, \"####\"),\n\t\tPREIS = toString(PREIS,\"#####\"),\n\t\t{PR CKey} = concat(ltrim(BANFN,'0'),toString(BNFPO, \"####\"))) ~> Transformations\nTransformations, IPRRELEASEDATE join(BANFN == {PR No}\n\t&& BNFPO == {PR Ln},\n\tjoinType:'left',\n\tbroadcast: 'auto')~> PRRELEASEEBANJN\nPRRELEASEEBANJN select(mapColumn(\n\t\t{PR Requested By} = AFNAM,\n\t\t{PR Requsition Date} = BADAT,\n\t\t{PR No} = BANFN,\n\t\t{PR Tracking No} = BEDNR,\n\t\t{PR Block Ind} = BLCKD,\n\t\t{PR Ln} = BNFPO,\n\t\t{PR Changed Date} = ERDAT,\n\t\t{PR Created By} = ERNAM,\n\t\t{PR Release Ind} = FRGKZ,\n\t\t{PR Release Strategy} = FRGST,\n\t\t{PR Release Status} = FRGZU,\n\t\t{PR Requested Delivery Date} = LFDAT,\n\t\t{PR Deletion Ind} = LOEKZ,\n\t\t{PR UOM} = MEINS,\n\t\t{PR Qty} = MENGE,\n\t\t{PR Price Unit} = PEINH,\n\t\t{PR Val Price} = PREIS,\n\t\t{PR Item Category} = PSTYP,\n\t\t{PR Total Val Rel} = RLWRT,\n\t\t{PR Processing Status} = STATU,\n\t\t{PR Desc} = TXZ01,\n\t\t{PR Doc Currency} = WAERS,\n\t\t{PR Release Date},\n\t\t{PR CKey}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> OnlyRequiredColumns\nOnlyRequiredColumns keyGenerate(output({PR SKey} as long),\n\tstartAt: 1L) ~> SurrogateKey\nSurrogateKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[F_PURCHASEREQUISITION]([PR CKey],[PR SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> FPRREQUISITIONS"
+		}
+	}
+}

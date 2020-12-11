@@ -1,0 +1,34 @@
+{
+	"name": "I_PORELEASEDATE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PO No",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PO Release Date",
+				"type": "date"
+			},
+			{
+				"name": "SKEY",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "I_PORELEASEDATE"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

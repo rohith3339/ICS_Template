@@ -1,0 +1,44 @@
+{
+	"name": "D_SALESOFFICE_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TVKBT",
+						"type": "DatasetReference"
+					},
+					"name": "TVKBT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_SalesOffice",
+						"type": "DatasetReference"
+					},
+					"name": "DSalesOffice"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "SalesOfficeSKey"
+				},
+				{
+					"name": "FilterLanguage"
+				},
+				{
+					"name": "SalesOfficeCKey"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tSPRAS as string,\n\t\tVKBUR as string,\n\t\tBEZEI as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> TVKBT\nFilterLanguage select(mapColumn(\n\t\t{Sales Office Code} = VKBUR,\n\t\t{Sales Office Description} = BEZEI\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nSalesOfficeCKey keyGenerate(output({Sales Office SKey} as long),\n\tstartAt: 1L) ~> SalesOfficeSKey\nTVKBT filter(SPRAS=='E') ~> FilterLanguage\nRequiredColumns derive({Sales Office Code} = ltrim({Sales Office Code}, '0'),\n\t\t{Sales Office CKey} = ltrim({Sales Office Code}, '0')) ~> SalesOfficeCKey\nSalesOfficeSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DSalesOffice"
+		}
+	}
+}

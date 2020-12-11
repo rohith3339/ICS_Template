@@ -1,0 +1,44 @@
+{
+	"name": "D_SHIPPINGPOINT_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TVSTT",
+						"type": "DatasetReference"
+					},
+					"name": "TVSTT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_ShippingPoint",
+						"type": "DatasetReference"
+					},
+					"name": "DShippingPoint"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "ShippingPointSKey"
+				},
+				{
+					"name": "FilterLanguage"
+				},
+				{
+					"name": "ShippingPointCKey"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tSPRAS as string,\n\t\tVSTEL as string,\n\t\tVTEXT as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> TVSTT\nFilterLanguage select(mapColumn(\n\t\t{Shipping Point} = VSTEL,\n\t\t{Shipping Point Description} = VTEXT\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nShippingPointCKey keyGenerate(output({Shipping Point SKey} as long),\n\tstartAt: 1L) ~> ShippingPointSKey\nTVSTT filter(SPRAS=='E') ~> FilterLanguage\nRequiredColumns derive({Shipping Point} = ltrim({Shipping Point}, '0'),\n\t\t{Shipping Point CKey} = ltrim({Shipping Point}, '0')) ~> ShippingPointCKey\nShippingPointSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DShippingPoint"
+		}
+	}
+}

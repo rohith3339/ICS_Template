@@ -1,0 +1,146 @@
+{
+	"name": "EKPO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AEDAT",
+				"type": "date"
+			},
+			{
+				"name": "ANFNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ANFPS",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "BANFN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BEDNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BNFPO",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "BRTWR",
+				"type": "decimal",
+				"precision": 13,
+				"scale": 2
+			},
+			{
+				"name": "BUKRS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EBELN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EBELP",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "EKPO_POLN_KEY",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ELIKZ",
+				"type": "nvarchar"
+			},
+			{
+				"name": "KNTTP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LEWED",
+				"type": "date"
+			},
+			{
+				"name": "LOEKZ",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MATKL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MATNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MEINS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MENGE",
+				"type": "decimal",
+				"precision": 13,
+				"scale": 3
+			},
+			{
+				"name": "NETPR",
+				"type": "decimal",
+				"precision": 11,
+				"scale": 2
+			},
+			{
+				"name": "NETWR",
+				"type": "decimal",
+				"precision": 13,
+				"scale": 2
+			},
+			{
+				"name": "PEINH",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "PRIO_URG",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "PSTYP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "STATU",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TXZ01",
+				"type": "nvarchar"
+			},
+			{
+				"name": "WERKS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LGORT",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EKPO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

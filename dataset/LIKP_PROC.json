@@ -1,0 +1,53 @@
+{
+	"name": "LIKP_PROC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "BLDAT",
+				"type": "date"
+			},
+			{
+				"name": "BOLNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EXNUM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LFDAT",
+				"type": "date"
+			},
+			{
+				"name": "SPE_LOEKZ",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TDDAT",
+				"type": "date"
+			},
+			{
+				"name": "VBELN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "WERKS",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "LIKP_PROC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

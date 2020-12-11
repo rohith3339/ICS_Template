@@ -1,0 +1,48 @@
+{
+	"name": "MSEG_PROC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "BWART",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MBLNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MJAHR",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "VBELN_IM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VBELP_IM",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ZEILE",
+				"type": "smallint",
+				"precision": 5
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "MSEG_PROC"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

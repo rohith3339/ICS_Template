@@ -1,0 +1,41 @@
+{
+	"name": "D_COMPANY_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "T001",
+						"type": "DatasetReference"
+					},
+					"name": "T001"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_Company",
+						"type": "DatasetReference"
+					},
+					"name": "DCompany"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RenameColumns"
+				},
+				{
+					"name": "CompanyCKey"
+				},
+				{
+					"name": "CompanySKey"
+				}
+			],
+			"script": "source(output(\n\t\tBUKRS as string,\n\t\tBUTXT as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> T001\nT001 select(mapColumn(\n\t\t{COMPANY CODE} = BUKRS,\n\t\t{COMPANY NAME} = BUTXT\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nRenameColumns select(mapColumn(\n\t\t{Company Code} = {COMPANY CODE},\n\t\t{Company Name} = {COMPANY NAME},\n\t\t{Company CKey} = {COMPANY CODE}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> CompanyCKey\nCompanyCKey keyGenerate(output({Company SKey} as long),\n\tstartAt: 1L) ~> CompanySKey\nCompanySKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[D_Company]([Company CKey],[Company SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DCompany"
+		}
+	}
+}

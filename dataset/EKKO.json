@@ -1,0 +1,124 @@
+{
+	"name": "EKKO",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AEDAT",
+				"type": "date"
+			},
+			{
+				"name": "ANGDT",
+				"type": "date"
+			},
+			{
+				"name": "BEDAT",
+				"type": "date"
+			},
+			{
+				"name": "BSART",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BSTYP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "BUKRS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DPAMT",
+				"type": "decimal",
+				"precision": 11,
+				"scale": 2
+			},
+			{
+				"name": "DPDAT",
+				"type": "date"
+			},
+			{
+				"name": "DPPCT",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 2
+			},
+			{
+				"name": "DPTYP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EBELN",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EKGRP",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EKKO_POHDR_KEY",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EKORG",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ERNAM",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FRGRL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "INCO1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "INCO2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "KNUMV",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LIFNR",
+				"type": "nvarchar"
+			},
+			{
+				"name": "WAERS",
+				"type": "nvarchar"
+			},
+			{
+				"name": "WKURS",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 5
+			},
+			{
+				"name": "ZBD1T",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "ZTERM",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EKKO"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

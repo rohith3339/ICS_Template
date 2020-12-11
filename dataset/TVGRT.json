@@ -1,0 +1,37 @@
+{
+	"name": "TVGRT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbisalesfin",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "MANDT",
+				"type": "varchar"
+			},
+			{
+				"name": "SPRAS",
+				"type": "varchar"
+			},
+			{
+				"name": "VKGRP",
+				"type": "varchar"
+			},
+			{
+				"name": "BEZEI",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "tvgrt"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

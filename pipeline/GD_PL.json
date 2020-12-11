@@ -1,0 +1,38 @@
+{
+	"name": "GD_PL",
+	"properties": {
+		"description": "This Pipeline is for GD to test the Dataflows",
+		"activities": [
+			{
+				"name": "F_PURCHASESES_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASESES_DF",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "SAPECCProcurementFD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-27T05:55:24Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,37 @@
+{
+	"name": "SRIKAR_PL",
+	"properties": {
+		"activities": [
+			{
+				"name": "F_PURCHASEORDER_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "F_PURCHASEORDER_DF",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "SAPECCProcurementFD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-11-26T13:48:18Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

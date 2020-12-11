@@ -1,0 +1,216 @@
+{
+	"name": "VBFA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbisalesfin",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "MANDT",
+				"type": "varchar"
+			},
+			{
+				"name": "VBELV",
+				"type": "varchar"
+			},
+			{
+				"name": "POSNV",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "VBELN",
+				"type": "varchar"
+			},
+			{
+				"name": "POSNN",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "VBTYP_N",
+				"type": "varchar"
+			},
+			{
+				"name": "RFMNG",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 3
+			},
+			{
+				"name": "MEINS",
+				"type": "varchar"
+			},
+			{
+				"name": "RFWRT",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 2
+			},
+			{
+				"name": "WAERS",
+				"type": "varchar"
+			},
+			{
+				"name": "VBTYP_V",
+				"type": "varchar"
+			},
+			{
+				"name": "PLMIN",
+				"type": "varchar"
+			},
+			{
+				"name": "TAQUI",
+				"type": "varchar"
+			},
+			{
+				"name": "ERDAT",
+				"type": "date"
+			},
+			{
+				"name": "ERZET",
+				"type": "sql_variant"
+			},
+			{
+				"name": "MATNR",
+				"type": "varchar"
+			},
+			{
+				"name": "BWART",
+				"type": "varchar"
+			},
+			{
+				"name": "BDART",
+				"type": "varchar"
+			},
+			{
+				"name": "PLART",
+				"type": "varchar"
+			},
+			{
+				"name": "STUFE",
+				"type": "decimal",
+				"precision": 2,
+				"scale": 0
+			},
+			{
+				"name": "LGNUM",
+				"type": "varchar"
+			},
+			{
+				"name": "AEDAT",
+				"type": "date"
+			},
+			{
+				"name": "FKTYP",
+				"type": "varchar"
+			},
+			{
+				"name": "BRGEW",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 3
+			},
+			{
+				"name": "GEWEI",
+				"type": "varchar"
+			},
+			{
+				"name": "VOLUM",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 3
+			},
+			{
+				"name": "VOLEH",
+				"type": "varchar"
+			},
+			{
+				"name": "FPLNR",
+				"type": "varchar"
+			},
+			{
+				"name": "FPLTR",
+				"type": "decimal",
+				"precision": 6,
+				"scale": 0
+			},
+			{
+				"name": "RFMNG_FLO",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "RFMNG_FLT",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "VRKME",
+				"type": "varchar"
+			},
+			{
+				"name": "ABGES",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SOBKZ",
+				"type": "varchar"
+			},
+			{
+				"name": "SONUM",
+				"type": "varchar"
+			},
+			{
+				"name": "KZBEF",
+				"type": "varchar"
+			},
+			{
+				"name": "NTGEW",
+				"type": "decimal",
+				"precision": 13,
+				"scale": 3
+			},
+			{
+				"name": "LOGSYS",
+				"type": "varchar"
+			},
+			{
+				"name": "WBSTA",
+				"type": "varchar"
+			},
+			{
+				"name": "CMETH",
+				"type": "varchar"
+			},
+			{
+				"name": "MJAHR",
+				"type": "decimal",
+				"precision": 4,
+				"scale": 0
+			},
+			{
+				"name": "VBTYPEXT_V",
+				"type": "varchar"
+			},
+			{
+				"name": "VBTYPEXT_N",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "vbfa"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

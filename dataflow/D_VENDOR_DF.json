@@ -1,0 +1,41 @@
+{
+	"name": "D_VENDOR_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "LFA1",
+						"type": "DatasetReference"
+					},
+					"name": "LFA1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_Vendor",
+						"type": "DatasetReference"
+					},
+					"name": "LoadVendor"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectRenameColumns"
+				},
+				{
+					"name": "TrimLeadingZerosGenCKEY"
+				},
+				{
+					"name": "VendorSKey"
+				}
+			],
+			"script": "source(output(\n\t\tLAND1 as string,\n\t\tLIFNR as string,\n\t\tNAME1 as string,\n\t\tORT01 as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> LFA1\nLFA1 select(mapColumn(\n\t\t{Vendor Country} = LAND1,\n\t\t{Vendor No} = LIFNR,\n\t\t{Vendor Name} = NAME1,\n\t\t{Vendor City} = ORT01\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumns\nSelectRenameColumns derive({Vendor No} = ltrim({Vendor No}, '0'),\n\t\t{Vendor CKEY} = ltrim({Vendor No}, '0')) ~> TrimLeadingZerosGenCKEY\nTrimLeadingZerosGenCKEY keyGenerate(output({Vendor SKey} as long),\n\tstartAt: 1L) ~> VendorSKey\nVendorSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[D_VENDOR]([Vendor CKey],[Vendor SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> LoadVendor"
+		}
+	}
+}

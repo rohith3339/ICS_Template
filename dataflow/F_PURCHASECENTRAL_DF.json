@@ -1,0 +1,170 @@
+{
+	"name": "F_PURCHASECENTRAL_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "EBAN",
+						"type": "DatasetReference"
+					},
+					"name": "EBAN"
+				},
+				{
+					"dataset": {
+						"referenceName": "EKKO",
+						"type": "DatasetReference"
+					},
+					"name": "EKKO"
+				},
+				{
+					"dataset": {
+						"referenceName": "EKPO",
+						"type": "DatasetReference"
+					},
+					"name": "EKPO"
+				},
+				{
+					"dataset": {
+						"referenceName": "EKET",
+						"type": "DatasetReference"
+					},
+					"name": "EKET"
+				},
+				{
+					"dataset": {
+						"referenceName": "LIPS_PROC",
+						"type": "DatasetReference"
+					},
+					"name": "LIPSPROC"
+				},
+				{
+					"dataset": {
+						"referenceName": "MSEG_PROC",
+						"type": "DatasetReference"
+					},
+					"name": "MSEGPROC"
+				},
+				{
+					"dataset": {
+						"referenceName": "EKBE",
+						"type": "DatasetReference"
+					},
+					"name": "EKBE"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "F_PurchaseCentral",
+						"type": "DatasetReference"
+					},
+					"name": "FPurchaseCentralSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "GetPOs"
+				},
+				{
+					"name": "JoinPODetails"
+				},
+				{
+					"name": "SelectPODetails"
+				},
+				{
+					"name": "SelectEBAN"
+				},
+				{
+					"name": "SelectRenameRFQPRComb"
+				},
+				{
+					"name": "EBANEKET"
+				},
+				{
+					"name": "SelectEBANEKET"
+				},
+				{
+					"name": "SelectPORFQComb"
+				},
+				{
+					"name": "JoinPRRFQPO"
+				},
+				{
+					"name": "SelectPRPO"
+				},
+				{
+					"name": "JoinPRPO"
+				},
+				{
+					"name": "ChoosePONo"
+				},
+				{
+					"name": "SelectFinalPORename"
+				},
+				{
+					"name": "GetPODetails"
+				},
+				{
+					"name": "ChooseDimFinalVals"
+				},
+				{
+					"name": "SelectDimFinal"
+				},
+				{
+					"name": "GetPOJN"
+				},
+				{
+					"name": "FilterPOs"
+				},
+				{
+					"name": "FilterPOWithRFQ"
+				},
+				{
+					"name": "GetEKETRFQs"
+				},
+				{
+					"name": "FilterGETRFQs"
+				},
+				{
+					"name": "SelectInbound"
+				},
+				{
+					"name": "JoinInbound"
+				},
+				{
+					"name": "DerivedColumnMSEG"
+				},
+				{
+					"name": "JoinMSEGGRKEY"
+				},
+				{
+					"name": "Filter1"
+				},
+				{
+					"name": "DerivedColumnEKBEGRKEY"
+				},
+				{
+					"name": "JoinEKBEGRKEY"
+				},
+				{
+					"name": "DerivedColumnGRKey"
+				},
+				{
+					"name": "SelectRequiredColumns"
+				},
+				{
+					"name": "GenerateCKeys"
+				},
+				{
+					"name": "SelectFinalColumns"
+				}
+			],
+			"script": "source(output(\n\t\tAFNAM as string,\n\t\tBADAT as date,\n\t\tBANFN as string,\n\t\tBEDNR as string,\n\t\tBLCKD as string,\n\t\tBNFPO as integer,\n\t\tBSART as string,\n\t\tBSMNG as decimal(13,3),\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tEKGRP as string,\n\t\tEKORG as string,\n\t\tERDAT as date,\n\t\tERNAM as string,\n\t\tFRGKZ as string,\n\t\tFRGST as string,\n\t\tFRGZU as string,\n\t\tKNTTP as string,\n\t\tLFDAT as date,\n\t\tLGORT as string,\n\t\tLOAD_DATETIME as date,\n\t\tLOEKZ as string,\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tMEINS as string,\n\t\tMENGE as decimal(13,3),\n\t\tPEINH as integer,\n\t\tPREIS as decimal(11,2),\n\t\tPRIO_URG as integer,\n\t\tPSTYP as string,\n\t\tRLWRT as decimal(15,2),\n\t\tSTATU as string,\n\t\tTXZ01 as string,\n\t\tWAERS as string,\n\t\tWERKS as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EBAN\nsource(output(\n\t\tAEDAT as date,\n\t\tANGDT as date,\n\t\tBEDAT as date,\n\t\tBSART as string,\n\t\tBSTYP as string,\n\t\tBUKRS as string,\n\t\tDPAMT as decimal(11,2),\n\t\tDPDAT as date,\n\t\tDPPCT as decimal(5,2),\n\t\tDPTYP as string,\n\t\tEBELN as string,\n\t\tEKGRP as string,\n\t\tEKKO_POHDR_KEY as string,\n\t\tEKORG as string,\n\t\tERNAM as string,\n\t\tFRGRL as string,\n\t\tINCO1 as string,\n\t\tINCO2 as string,\n\t\tKNUMV as string,\n\t\tLIFNR as string,\n\t\tWAERS as string,\n\t\tWKURS as decimal(9,5),\n\t\tZBD1T as integer,\n\t\tZTERM as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKKO\nsource(output(\n\t\tAEDAT as date,\n\t\tANFNR as string,\n\t\tANFPS as integer,\n\t\tBANFN as string,\n\t\tBEDNR as string,\n\t\tBNFPO as integer,\n\t\tBRTWR as decimal(13,2),\n\t\tBUKRS as string,\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tEKPO_POLN_KEY as string,\n\t\tELIKZ as string,\n\t\tKNTTP as string,\n\t\tLEWED as date,\n\t\tLOEKZ as string,\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tMEINS as string,\n\t\tMENGE as decimal(13,3),\n\t\tNETPR as decimal(11,2),\n\t\tNETWR as decimal(13,2),\n\t\tPEINH as integer,\n\t\tPRIO_URG as integer,\n\t\tPSTYP as string,\n\t\tSTATU as string,\n\t\tTXZ01 as string,\n\t\tWERKS as string,\n\t\tLGORT as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKPO\nsource(output(\n\t\tBANFN as string,\n\t\tBNFPO as integer,\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tEINDT as date,\n\t\tEKET_SCHLN_KEY as string,\n\t\tSLFDT as date,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKET\nsource(output(\n\t\tARKTX as string,\n\t\tLFIMG as decimal(13,3),\n\t\tMATKL as string,\n\t\tMATNR as string,\n\t\tNETWR as decimal(15,2),\n\t\tPOSNR as integer,\n\t\tVBELN as string,\n\t\tVGBEL as string,\n\t\tVGPOS as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> LIPSPROC\nsource(output(\n\t\tBWART as string,\n\t\tMBLNR as string,\n\t\tMJAHR as integer,\n\t\tVBELN_IM as string,\n\t\tVBELP_IM as integer,\n\t\tZEILE as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> MSEGPROC\nsource(output(\n\t\tBELNR as string,\n\t\tBEWTP as string,\n\t\tBLDAT as date,\n\t\tBUDAT as date,\n\t\tBUZEI as integer,\n\t\tBWART as string,\n\t\tDMBTR as decimal(15,3),\n\t\tEBELN as string,\n\t\tEBELP as integer,\n\t\tERNAM as string,\n\t\tGJAHR as integer,\n\t\tMENGE as decimal(15,3),\n\t\tSHKZG as string,\n\t\tWAERS as string,\n\t\tWRBTR as decimal(15,3),\n\t\tLFBNR as string,\n\t\tLFGJA as string,\n\t\tLFPOS as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> EKBE\nEKKO filter(BSTYP !='A') ~> GetPOs\nGetPOs, EKPO join(EKKO@EBELN == EKPO@EBELN,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinPODetails\nJoinPODetails select(mapColumn(\n\t\tEBELN = EKKO@EBELN,\n\t\tEBELP,\n\t\tBANFN,\n\t\tBNFPO,\n\t\tBEDNR,\n\t\tEKGRP,\n\t\tEKORG,\n\t\tLGORT,\n\t\tMATKL,\n\t\tMATNR,\n\t\tWAERS,\n\t\tWERKS,\n\t\tLIFNR,\n\t\tBUKRS = EKKO@BUKRS,\n\t\tANFNR,\n\t\tANFPS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectPODetails\nEBAN select(mapColumn(\n\t\tBANFN,\n\t\tBEDNR,\n\t\tBNFPO,\n\t\tEBELN,\n\t\tEBELP,\n\t\tEKGRP,\n\t\tEKORG,\n\t\tLGORT,\n\t\tMATKL,\n\t\tMATNR,\n\t\tWAERS,\n\t\tWERKS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectEBAN\nFilterGETRFQs select(mapColumn(\n\t\t{PR No} = BANFN,\n\t\t{PR Ln} = BNFPO,\n\t\t{RFQ No} = EKET@EBELN,\n\t\t{RFQ Ln} = EBELP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameRFQPRComb\nSelectEBAN, SelectRenameRFQPRComb join(BANFN == {PR No}\n\t&& BNFPO == {PR Ln},\n\tjoinType:'left',\n\tbroadcast: 'auto')~> EBANEKET\nEBANEKET select(mapColumn(\n\t\tBANFN,\n\t\tBNFPO,\n\t\tEBELN,\n\t\tEBELP,\n\t\tBEDNR,\n\t\tEKGRP,\n\t\tEKORG,\n\t\tLGORT,\n\t\tMATKL,\n\t\tMATNR,\n\t\tWAERS,\n\t\tWERKS,\n\t\t{RFQ No},\n\t\t{RFQ Ln}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectEBANEKET\nFilterPOWithRFQ select(mapColumn(\n\t\tANFNR,\n\t\tANFPS,\n\t\tEBELN = EKPO@EBELN,\n\t\tEBELP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectPORFQComb\nSelectEBANEKET, SelectPORFQComb join({RFQ No} == ANFNR\n\t&& {RFQ Ln} == ANFPS,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinPRRFQPO\nFilterPOs select(mapColumn(\n\t\tBANFN,\n\t\tBNFPO,\n\t\tEBELN = EKPO@EBELN,\n\t\tEBELP\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectPRPO\nJoinPRRFQPO, SelectPRPO join(SelectEBANEKET@BANFN == SelectPRPO@BANFN\n\t&& SelectEBANEKET@BNFPO == SelectPRPO@BNFPO,\n\tjoinType:'outer',\n\tbroadcast: 'auto')~> JoinPRPO\nJoinPRPO derive({PO No} = iifNull(SelectPORFQComb@EBELN, SelectPRPO@EBELN, SelectPORFQComb@EBELN),\n\t\t{PO Ln} = iifNull(SelectPORFQComb@EBELP,SelectPRPO@EBELP,SelectPORFQComb@EBELP)) ~> ChoosePONo\nChoosePONo select(mapColumn(\n\t\t{PR No} = SelectEBANEKET@BANFN,\n\t\t{PR Ln} = SelectEBANEKET@BNFPO,\n\t\tBEDNR,\n\t\tEKGRP,\n\t\tEKORG,\n\t\tLGORT,\n\t\tMATKL,\n\t\tMATNR,\n\t\tWAERS,\n\t\tWERKS,\n\t\t{RFQ No},\n\t\t{RFQ Ln},\n\t\t{PO No},\n\t\t{PO Ln}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectFinalPORename\nSelectFinalPORename, SelectPODetails join({PO No} == EBELN\n\t&& {PO Ln} == EBELP,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> GetPODetails\nGetPODetails derive(EKGRP_F = iifNull(SelectFinalPORename@EKGRP, SelectPODetails@EKGRP, SelectFinalPORename@EKGRP),\n\t\tEKORG_F = iifNull(SelectFinalPORename@EKORG, SelectPODetails@EKORG, SelectFinalPORename@EKORG),\n\t\tLGORT_F = iifNull(SelectFinalPORename@LGORT, SelectPODetails@LGORT, SelectFinalPORename@LGORT),\n\t\tMATKL_F = iifNull(SelectFinalPORename@MATKL, SelectPODetails@MATKL, SelectFinalPORename@MATKL),\n\t\tMATNR_F = iifNull(SelectFinalPORename@MATNR, SelectPODetails@MATNR, SelectFinalPORename@MATNR),\n\t\tWAERS_F = iifNull(SelectFinalPORename@WAERS, SelectPODetails@WAERS, SelectFinalPORename@WAERS),\n\t\tWERKS_F = iifNull(SelectFinalPORename@WERKS, SelectPODetails@WERKS, SelectFinalPORename@WERKS)) ~> ChooseDimFinalVals\nChooseDimFinalVals select(mapColumn(\n\t\t{PR No},\n\t\t{PR Ln},\n\t\t{RFQ No},\n\t\t{RFQ Ln},\n\t\t{PO No},\n\t\t{PO Ln},\n\t\tLIFNR,\n\t\tBUKRS,\n\t\tEKGRP_F,\n\t\tEKORG_F,\n\t\tLGORT_F,\n\t\tMATKL_F,\n\t\tMATNR_F,\n\t\tWAERS_F,\n\t\tWERKS_F\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectDimFinal\nEKPO, EKKO join(EKPO@EBELN == EKKO@EBELN,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> GetPOJN\nGetPOJN filter(BSTYP != 'A') ~> FilterPOs\nGetPOJN filter(BSTYP=='A') ~> FilterPOWithRFQ\nEKET, EKKO join(EKET@EBELN == EKKO@EBELN,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> GetEKETRFQs\nGetEKETRFQs filter(BSTYP =='A') ~> FilterGETRFQs\nLIPSPROC select(mapColumn(\n\t\t{Inbound Ln} = POSNR,\n\t\t{Inbound No} = VBELN,\n\t\tVGBEL,\n\t\tVGPOS\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectInbound\nSelectDimFinal, SelectInbound join({PO No} == VGBEL\n\t&& {PO Ln} == VGPOS,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinInbound\nMSEGPROC derive(MSEGGRKEY = concat(toString(MJAHR), MBLNR,toString(ZEILE))) ~> DerivedColumnMSEG\nJoinInbound, DerivedColumnMSEG join({Inbound No} == VBELN_IM\n\t&& {Inbound Ln} == VBELP_IM,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinMSEGGRKEY\nEKBE filter(BEWTP==\"E\") ~> Filter1\nFilter1 derive(EKBEGRKEY = concat(toString(GJAHR), BELNR,toString(BUZEI))) ~> DerivedColumnEKBEGRKEY\nJoinMSEGGRKEY, DerivedColumnEKBEGRKEY join({PO No} == EBELN\n\t&& {PO Ln} == EBELP,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> JoinEKBEGRKEY\nJoinEKBEGRKEY derive({GR Key} = iif(isNull(MSEGGRKEY), EKBEGRKEY, MSEGGRKEY)) ~> DerivedColumnGRKey\nDerivedColumnGRKey select(mapColumn(\n\t\t{PR No},\n\t\t{PR Ln},\n\t\t{RFQ No},\n\t\t{RFQ Ln},\n\t\t{PO No},\n\t\t{PO Ln},\n\t\t{Vendor No} = LIFNR,\n\t\t{Company Code} = BUKRS,\n\t\t{Purchasing Group No} = EKGRP_F,\n\t\tEKORG_F,\n\t\tStoregeLocationKey = LGORT_F,\n\t\t{Material Group No} = MATKL_F,\n\t\t{Material No} = MATNR_F,\n\t\t{Currency Code} = WAERS_F,\n\t\t{Plant No} = WERKS_F,\n\t\t{Inbound Ln},\n\t\t{Inbound No},\n\t\t{GR Key},\n\t\tLFBNR\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRequiredColumns\nSelectRequiredColumns derive({PO CKey} = iifNull(ltrim(concat({PO No},toString({PO Ln})),\"0\"),\"-1\",ltrim(concat({PO No},toString({PO Ln})),\"0\")),\n\t\t{PR CKey} = iifNull(ltrim(concat({PR No},toString({PR Ln})),\"0\"),\"-1\",ltrim(concat({PR No},toString({PR Ln})),\"0\")),\n\t\t{Inbound CKey} = iifNull(ltrim(concat({Inbound No},toString({Inbound Ln})),\"0\"),\"-1\",ltrim(concat({Inbound No},toString({Inbound Ln})),\"0\")),\n\t\t{RFQ CKey} = iifNull(ltrim(concat({RFQ No},toString({RFQ Ln})),\"0\"),\"-1\",ltrim(concat({RFQ No},toString({RFQ Ln})),\"0\")),\n\t\t{Vendor CKey} = iifNull(ltrim({Vendor No},\"0\"),\"-1\",ltrim({Vendor No},\"0\")),\n\t\t{Company CKey} = iifNull(ltrim({Company Code},\"0\"),\"-1\",ltrim({Company Code},\"0\")),\n\t\t{Purchasing CKey} = iifNull(ltrim({Purchasing Group No},\"0\"),\"-1\",ltrim({Purchasing Group No},\"0\")),\n\t\t{StoregeLocation CKey} = iifNull(ltrim(StoregeLocationKey,\"0\"),\"-1\",ltrim(StoregeLocationKey,\"0\")),\n\t\t{Material Group CKey} = iifNull(ltrim({Material Group No},\"0\"),\"-1\",ltrim({Material Group No},\"0\")),\n\t\t{Material CKey} = iifNull(ltrim({Material No},\"0\"),\"-1\",ltrim({Material No},\"0\")),\n\t\t{Currency CKey} = iifNull(ltrim({Currency Code},\"0\"),\"-1\",ltrim({Currency Code},\"0\")),\n\t\t{Plant CKey} = iifNull(ltrim({Plant No},\"0\"),\"-1\",ltrim({Plant No},\"0\")),\n\t\t{GR CKey} = iifNull(ltrim({GR Key},\"0\"),\"-1\",ltrim({GR Key},\"0\")),\n\t\t{SES CKey} = iifNull(ltrim(LFBNR,\"0\"),\"-1\",ltrim(LFBNR,\"0\")),\n\t\t{Purchasing Org CKey} = iifNull(ltrim(EKORG_F,\"0\"),\"-1\",ltrim(EKORG_F,\"0\"))) ~> GenerateCKeys\nGenerateCKeys select(mapColumn(\n\t\t{Vendor CKey},\n\t\t{Company CKey},\n\t\t{Purchasing Group CKey} = {Purchasing CKey},\n\t\t{Purchasing Org CKey},\n\t\t{StoregeLocation CKey},\n\t\t{Material Group CKey},\n\t\t{Material CKey},\n\t\t{Currency CKey},\n\t\t{Plant CKey},\n\t\t{GR CKey},\n\t\t{PR CKey},\n\t\t{PO CKey},\n\t\t{Inbound CKey},\n\t\t{RFQ CKey},\n\t\t{SES CKey}\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectFinalColumns\nSelectFinalColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> FPurchaseCentralSink"
+		}
+	}
+}

@@ -1,0 +1,41 @@
+{
+	"name": "D_PLANT_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "T001W",
+						"type": "DatasetReference"
+					},
+					"name": "T001W"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_Plant",
+						"type": "DatasetReference"
+					},
+					"name": "PlantSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RenameColumns"
+				},
+				{
+					"name": "PlantCKey"
+				},
+				{
+					"name": "PlantSKey"
+				}
+			],
+			"script": "source(output(\n\t\tNAME1 as string,\n\t\tWERKS as string,\n\t\tLOAD_DATETIME as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> T001W\nT001W select(mapColumn(\n\t\t{Plant Name} = NAME1,\n\t\t{Plant No} = WERKS\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RenameColumns\nRenameColumns select(mapColumn(\n\t\t{Plant Name},\n\t\t{Plant No},\n\t\t{Plant CKey} = {Plant No}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> PlantCKey\nPlantCKey keyGenerate(output({Plant SKey} as long),\n\tstartAt: 1L) ~> PlantSKey\nPlantSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tpostSQLs:['insert into [dbo].[D_PLANT]([Plant CKey],[Plant SKey]) values(\\'-1\\',-1)'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> PlantSink"
+		}
+	}
+}

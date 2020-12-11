@@ -1,0 +1,57 @@
+{
+	"name": "I_PRRELEASEDATE_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CDHDR_PROC",
+						"type": "DatasetReference"
+					},
+					"name": "CDHDRPROC"
+				},
+				{
+					"dataset": {
+						"referenceName": "CDPOS_PROC",
+						"type": "DatasetReference"
+					},
+					"name": "CDPOSPROC"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "I_PRRELEASEDATE",
+						"type": "DatasetReference"
+					},
+					"name": "LoadtoIPRReleaseDate"
+				}
+			],
+			"transformations": [
+				{
+					"name": "CDHDRPOSJN"
+				},
+				{
+					"name": "FilterVALUENEWOBJECTCLASS"
+				},
+				{
+					"name": "SelectRenameColumns"
+				},
+				{
+					"name": "MaxUDATE"
+				},
+				{
+					"name": "ExtractPRLn"
+				},
+				{
+					"name": "TrimLeadingZeros"
+				}
+			],
+			"script": "source(output(\n\t\tCHANGENR as string,\n\t\tOBJECTCLAS as string,\n\t\tOBJECTID as string,\n\t\tUDATE as date,\n\t\tUSERNAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> CDHDRPROC\nsource(output(\n\t\tCHANGENR as string,\n\t\tCHNGIND as string,\n\t\tOBJECTCLAS as string,\n\t\tOBJECTID as string,\n\t\tTABKEY as string,\n\t\tTABNAME as string,\n\t\tVALUE_NEW as string,\n\t\tFNAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tbatchSize: 5000,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> CDPOSPROC\nCDHDRPROC, CDPOSPROC join(CDHDRPROC@CHANGENR == CDPOSPROC@CHANGENR\n\t&& CDHDRPROC@OBJECTID == CDPOSPROC@OBJECTID\n\t&& CDHDRPROC@OBJECTCLAS == CDPOSPROC@OBJECTCLAS,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> CDHDRPOSJN\nCDHDRPOSJN filter(CDHDRPROC@OBJECTCLAS =='BANF' && VALUE_NEW == \"2\") ~> FilterVALUENEWOBJECTCLASS\nFilterVALUENEWOBJECTCLASS select(mapColumn(\n\t\t{PR No} = CDHDRPROC@OBJECTID,\n\t\t{PR Release Date} = UDATE,\n\t\t{PR Ln} = TABKEY\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectRenameColumns\nSelectRenameColumns aggregate(groupBy({PR No},\n\t\t{PR Ln}),\n\t{PR Release Date} = max({PR Release Date})) ~> MaxUDATE\nMaxUDATE derive({PR Ln} = substring({PR Ln}, 14, 5)) ~> ExtractPRLn\nExtractPRLn derive({PR No} = ltrim({PR No},'0'),\n\t\t{PR Ln} = ltrim({PR Ln},'0')) ~> TrimLeadingZeros\nTrimLeadingZeros sink(input(\n\t\t{PR No} as string,\n\t\t{PR Ln} as string,\n\t\t{PR Release Date} as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tbatchSize: 5000,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> LoadtoIPRReleaseDate"
+		}
+	}
+}

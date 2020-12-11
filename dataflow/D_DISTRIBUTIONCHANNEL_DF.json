@@ -1,0 +1,44 @@
+{
+	"name": "D_DISTRIBUTIONCHANNEL_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "TVTWT",
+						"type": "DatasetReference"
+					},
+					"name": "TVTWT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_DistributionChannel",
+						"type": "DatasetReference"
+					},
+					"name": "DDistributionChannel"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DistributionChannelSKey"
+				},
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "FilterLanguage"
+				},
+				{
+					"name": "DistributionChannelCKey"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tSPRAS as string,\n\t\tVTWEG as string,\n\t\tVTEXT as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> TVTWT\nDistributionChannelCKey keyGenerate(output({Distribution Channel SKey} as long),\n\tstartAt: 1L) ~> DistributionChannelSKey\nFilterLanguage select(mapColumn(\n\t\t{Distribution Channel} = VTWEG,\n\t\t{Distribution Channel Name} = VTEXT\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nTVTWT filter(SPRAS=='E') ~> FilterLanguage\nRequiredColumns select(mapColumn(\n\t\t{Distribution Channel},\n\t\t{Distribution Channel Name},\n\t\t{Distribution Channel CKey} = {Distribution Channel}\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> DistributionChannelCKey\nDistributionChannelSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DDistributionChannel"
+		}
+	}
+}

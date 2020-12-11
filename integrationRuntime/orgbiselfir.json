@@ -1,0 +1,7 @@
+{
+	"name": "orgbiselfir",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "This is orgbi integration server to connect to client sources"
+	}
+}

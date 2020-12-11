@@ -1,0 +1,34 @@
+{
+	"name": "STAR_KEYGEN",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "orgbidw",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SAPECCSource"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "STARCKEY",
+				"type": "nvarchar"
+			},
+			{
+				"name": "STARSKEY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "STARTEXT",
+				"type": "nchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "STAR_KEYGEN"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

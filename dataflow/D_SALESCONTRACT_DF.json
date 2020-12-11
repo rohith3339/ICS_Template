@@ -1,0 +1,41 @@
+{
+	"name": "D_SALESCONTRACT_DF",
+	"properties": {
+		"folder": {
+			"name": "SAPECCDataFlows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "VBAK",
+						"type": "DatasetReference"
+					},
+					"name": "VBAK"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "D_SalesContract",
+						"type": "DatasetReference"
+					},
+					"name": "DSalesContract"
+				}
+			],
+			"transformations": [
+				{
+					"name": "RequiredColumns"
+				},
+				{
+					"name": "SalesContractSKey"
+				},
+				{
+					"name": "SalesContractCKey"
+				}
+			],
+			"script": "source(output(\n\t\tMANDT as string,\n\t\tVBELN as string,\n\t\tERDAT as date,\n\t\tERZET as string,\n\t\tERNAM as string,\n\t\tANGDT as date,\n\t\tBNDDT as date,\n\t\tAUDAT as date,\n\t\tVBTYP as string,\n\t\tTRVOG as string,\n\t\tAUART as string,\n\t\tAUGRU as string,\n\t\tGWLDT as date,\n\t\tSUBMI as string,\n\t\tLIFSK as string,\n\t\tFAKSK as string,\n\t\tNETWR as decimal(15,2),\n\t\tWAERK as string,\n\t\tVKORG as string,\n\t\tVTWEG as string,\n\t\tSPART as string,\n\t\tVKGRP as string,\n\t\tVKBUR as string,\n\t\tGSBER as string,\n\t\tGSKST as string,\n\t\tGUEBG as date,\n\t\tGUEEN as date,\n\t\tKNUMV as string,\n\t\tVDATU as date,\n\t\tVPRGR as string,\n\t\tAUTLF as string,\n\t\tVBKLA as string,\n\t\tVBKLT as string,\n\t\tKALSM as string,\n\t\tVSBED as string,\n\t\tFKARA as string,\n\t\tAWAHR as decimal(3,0),\n\t\tKTEXT as string,\n\t\tBSTNK as string,\n\t\tBSARK as string,\n\t\tBSTDK as date,\n\t\tBSTZD as string,\n\t\tIHREZ as string,\n\t\tBNAME as string,\n\t\tTELF1 as string,\n\t\tMAHZA as decimal(3,0),\n\t\tMAHDT as date,\n\t\tKUNNR as string,\n\t\tKOSTL as string,\n\t\tSTAFO as string,\n\t\tSTWAE as string,\n\t\tAEDAT as date,\n\t\tKVGR1 as string,\n\t\tKVGR2 as string,\n\t\tKVGR3 as string,\n\t\tKVGR4 as string,\n\t\tKVGR5 as string,\n\t\tKNUMA as string,\n\t\tKOKRS as string,\n\t\tPS_PSP_PNR as decimal(8,0),\n\t\tKURST as string,\n\t\tKKBER as string,\n\t\tKNKLI as string,\n\t\tGRUPP as string,\n\t\tSBGRP as string,\n\t\tCTLPC as string,\n\t\tCMWAE as string,\n\t\tCMFRE as date,\n\t\tCMNUP as date,\n\t\tCMNGV as date,\n\t\tAMTBL as decimal(15,2),\n\t\tHITYP_PR as string,\n\t\tABRVW as string,\n\t\tABDIS as string,\n\t\tVGBEL as string,\n\t\tOBJNR as string,\n\t\tBUKRS_VF as string,\n\t\tTAXK1 as string,\n\t\tTAXK2 as string,\n\t\tTAXK3 as string,\n\t\tTAXK4 as string,\n\t\tTAXK5 as string,\n\t\tTAXK6 as string,\n\t\tTAXK7 as string,\n\t\tTAXK8 as string,\n\t\tTAXK9 as string,\n\t\tXBLNR as string,\n\t\tZUONR as string,\n\t\tVGTYP as string,\n\t\tKALSM_CH as string,\n\t\tAGRZR as decimal(2,0),\n\t\tAUFNR as string,\n\t\tQMNUM as string,\n\t\tVBELN_GRP as string,\n\t\tSCHEME_GRP as string,\n\t\tABRUF_PART as string,\n\t\tABHOD as date,\n\t\tABHOV as string,\n\t\tABHOB as string,\n\t\tRPLNR as string,\n\t\tVZEIT as string,\n\t\tSTCEG_L as string,\n\t\tLANDTX as string,\n\t\tXEGDR as string,\n\t\tENQUEUE_GRP as string,\n\t\tDAT_FZAU as date,\n\t\tFMBDAT as date,\n\t\tVSNMR_V as string,\n\t\tHANDLE as string,\n\t\tPROLI as string,\n\t\tCONT_DG as string,\n\t\tCRM_GUID as string,\n\t\tUPD_TMSTMP as decimal(21,7),\n\t\tMSR_ID as string,\n\t\tTM_CTRL_KEY as string,\n\t\tHANDOVERLOC as string,\n\t\tPSM_BUDAT as date,\n\t\tSWENR as string,\n\t\tSMENR as string,\n\t\tPHASE as string,\n\t\tMTLAUR as string,\n\t\tSTAGE as integer,\n\t\tHB_CONT_REASON as string,\n\t\tHB_EXPDATE as date,\n\t\tHB_RESDATE as date,\n\t\tLOGSYSB as string,\n\t\tKALCD as string,\n\t\tMULTI as string,\n\t\tSPPAYM as string,\n\t\tZTERM as string,\n\t\tZSTAT as string,\n\t\tZYESNO as string,\n\t\tRIGNO as string,\n\t\tWELLNO as string,\n\t\tLOCTN as string,\n\t\tDRIVER as string,\n\t\tVEHICLE as string,\n\t\tVEHREG as string,\n\t\tDRCVID as string,\n\t\tDRCNTNO as string,\n\t\tNAPNO as string,\n\t\tEURIGS as string,\n\t\tSUBJECT as string,\n\t\tVESNAME as string,\n\t\tORGCD as string,\n\t\tREFERENCE as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> VBAK\nVBAK select(mapColumn(\n\t\t{Contract No} = VBELN,\n\t\t{Contract Text} = KTEXT,\n\t\t{Contract Date} = ERDAT,\n\t\t{Contract Created By} = ERNAM,\n\t\t{Contract Valid From} = GUEBG,\n\t\t{Contract Valid Upto} = GUEEN\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> RequiredColumns\nSalesContractCKey keyGenerate(output({Contract SKey} as long),\n\tstartAt: 1L) ~> SalesContractSKey\nRequiredColumns derive({Contract No} = ltrim({Contract No}, '0'),\n\t\t{Sales Contract CKey} = ltrim({Contract No}, '0')) ~> SalesContractCKey\nSalesContractSKey sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> DSalesContract"
+		}
+	}
+}

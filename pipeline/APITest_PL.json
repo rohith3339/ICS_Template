@@ -1,0 +1,291 @@
+{
+	"name": "APITest_PL",
+	"properties": {
+		"description": "NOTE: No one should use this pipeline except running the API and required token.",
+		"activities": [
+			{
+				"name": "Azure Authentication",
+				"description": "Used to get a token from the Azure directory to initiate the API calling with the returned token.",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": true,
+					"secureInput": true
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://login.microsoftonline.com/62e4d6a7-18d9-4328-a4d9-22e69ebc37e2/oauth2/v2.0/token",
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": "client_id=c3dd2eb1-cd63-4acd-bb6b-79af6b9c1b0a\n&scope=https://management.azure.com//.default\n&grant_type=client_credentials \n&client_secret=4rFk_zsaYT8P~IH-.liXzc.P0S531633GM "
+				}
+			},
+			{
+				"name": "Web3",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "PowerBIDatasetWorkspace",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptionId,'?api-version=2020-01-01')",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "GET",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('Azure Authentication').output.access_token))",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Creating Integration_Runtime",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Creating DataFactory",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptionId,'/resourceGroups/',pipeline().parameters.resourceGroupName,'/providers/Microsoft.DataFactory/factories/',pipeline().parameters.factoryName,'DATAFAC/integrationRuntimes/',pipeline().parameters.databaseName,'DFIR?api-version=2018-06-01')\n\n",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "PUT",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('Azure Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"properties": {
+							"type": "SelfHosted",
+							"description": "A selfhosted integration runtime"
+						}
+					}
+				}
+			},
+			{
+				"name": "Creating Database",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Azure Authentication",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptionId,'/resourceGroups/',pipeline().parameters.resourceGroupName,'/providers/Microsoft.Sql/servers/orgbimssql/databases/',pipeline().parameters.databaseName,'SQLDB?api-version=2017-10-01-preview')",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "PUT",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('Azure Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-type": "application/json"
+					},
+					"body": {
+						"location": "eastus2",
+						"sku": {
+							"name": "GP_S_Gen5",
+							"capacity": 1,
+							"family": "Gen5",
+							"tier": "GeneralPurpose"
+						}
+					}
+				}
+			},
+			{
+				"name": "Creating DataFactory",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Creating Database",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptionId,'/resourceGroups/',pipeline().parameters.resourceGroupName,'/providers/Microsoft.DataFactory/factories/',pipeline().parameters.factoryName,'DATAFAC?api-version=2018-06-01')",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "PUT",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('Azure Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-Type": "application/json"
+					},
+					"body": {
+						"location": "eastus2"
+					}
+				}
+			},
+			{
+				"name": "PowerBI_Authentication",
+				"description": "Used to get a token from the Azure directory to initiate the API calling with the returned token.",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": true,
+					"secureInput": true
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://login.microsoftonline.com/62e4d6a7-18d9-4328-a4d9-22e69ebc37e2/oauth2/v2.0/token",
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": "client_id=c3dd2eb1-cd63-4acd-bb6b-79af6b9c1b0a\n&scope=https://analysis.windows.net/powerbi/api/.default\n&grant_type=client_credentials \n&client_secret=4rFk_zsaYT8P~IH-.liXzc.P0S531633GM "
+				}
+			},
+			{
+				"name": "PowerBIDatasetWorkspace",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Creating Integration_Runtime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "PowerBI_Authentication",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://api.powerbi.com/v1.0/myorg/groups?workspaceV2=True",
+					"connectVia": {
+						"referenceName": "OrgBIDevIR",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',string(activity('PowerBI_Authentication').output.access_token))",
+							"type": "Expression"
+						},
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": "name=@concat('pipeline().parameters.factoryName','DatasetWorkspace')"
+				}
+			}
+		],
+		"parameters": {
+			"subscriptionId": {
+				"type": "string",
+				"defaultValue": "6fe100c3-7b99-4487-a87c-b3ed63ae5fa9"
+			},
+			"resourceGroupName": {
+				"type": "string",
+				"defaultValue": "AnalyticsProj"
+			},
+			"databaseName": {
+				"type": "string",
+				"defaultValue": "STAAT"
+			},
+			"factoryName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-12-02T06:00:48Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

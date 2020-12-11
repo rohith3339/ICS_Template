@@ -1,0 +1,17 @@
+{
+	"name": "OrgBIDevIR",
+	"properties": {
+		"type": "Managed",
+		"description": "This integration runtime is for Orgbi Developemnt Environment",
+		"typeProperties": {
+			"computeProperties": {
+				"location": "East US 2",
+				"dataFlowProperties": {
+					"computeType": "General",
+					"coreCount": 8,
+					"timeToLive": 0
+				}
+			}
+		}
+	}
+}
